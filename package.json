@@ -1,0 +1,58 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "author": "Muhammad Umar",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.0",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.3"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "health": "node -e \"import('http').then(m=>m.get('http://localhost:5000/health',r=>console.log(r.statusCode)))\""
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.10.0",
+    "compression": "^1.7.5",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.0",
+    "express-request-id": "^1.4.0",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.3",
+    "mongo-sanitize": "^1.1.0",
+    "multer": "^2.1.1",
+    "nanoid": "^5.1.11",
+    "pino": "^9.3.0",
+    "pino-http": "^9.0.0",
+    "resend": "^6.12.4",
+    "zod": "^3.23.8"
+  }
+}
