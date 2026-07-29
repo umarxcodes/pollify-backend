@@ -27,6 +27,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "prepare": "husky",
     "health": "node -e \"import('http').then(m=>m.get('http://localhost:5000/health',r=>console.log(r.statusCode)))\""
   },
