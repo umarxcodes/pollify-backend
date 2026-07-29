@@ -110,6 +110,18 @@ const userSchema = new Schema(
       ],
       default: [],
     },
+    notificationPreferences: {
+      type: {
+        emailNotifications: { type: Boolean, default: true },
+        pushNotifications: { type: Boolean, default: true },
+        voteNotifications: { type: Boolean, default: true },
+        commentNotifications: { type: Boolean, default: true },
+        pollNotifications: { type: Boolean, default: true },
+        systemNotifications: { type: Boolean, default: true },
+        marketingNotifications: { type: Boolean, default: false },
+      },
+      default: {},
+    },
   },
   {
     timestamps: true,
