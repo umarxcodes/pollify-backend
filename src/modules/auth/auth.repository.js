@@ -1,5 +1,6 @@
 import User from "../../models/User.js";
 import RefreshToken from "../../models/RefreshToken.js";
+import PasswordResetToken from "../../models/PasswordResetToken.js";
 
 // Repository pattern: all database operations for the auth domain
 class AuthRepository {
@@ -25,6 +26,10 @@ class AuthRepository {
     return await User.findById(id);
   }
 
+  async findUserByIdWithPassword(id) {
+    return User.findById(id).select("+password");
+  }
+
   // Create a new user document
   async createUser(userData) {
     const user = await User.create(userData);
@@ -41,6 +46,22 @@ class AuthRepository {
         select: "-password",
       }
     );
+  }
+
+  async updateUserProfile(userId, updates) {
+    return User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+  }
+
+  async updatePassword(userId, password) {
+    const user = await User.findById(userId).select("+password");
+    if (!user) return null;
+    user.password = password;
+    await user.save();
+    return user;
   }
 
   // Update last login timestamp and activity log
@@ -61,34 +82,28 @@ class AuthRepository {
     );
   }
 
-  // Store refresh token
-  async createRefreshToken(tokenData) {
-    return await RefreshToken.create(tokenData);
-  }
-
-  // Find refresh token by hashed token
-  async findRefreshToken(hashedToken) {
-    const tokens = await RefreshToken.find({});
-    for (const token of tokens) {
-      const isValid = await token.compareRefreshToken?.(hashedToken);
-      if (isValid) return token;
-    }
-    return null;
-  }
-
-  // Find refresh token by userId
-  async findRefreshTokenByUserId(userId) {
-    return await RefreshToken.findOne({ userId });
-  }
-
-  // Delete refresh token
-  async deleteRefreshToken(tokenId) {
-    return await RefreshToken.deleteOne({ _id: tokenId });
-  }
-
   // Delete all refresh tokens for a user
   async deleteRefreshTokensByUserId(userId) {
     return await RefreshToken.deleteMany({ userId });
+  }
+
+  async upsertPasswordResetToken(userId, hashedToken, expiresAt) {
+    return PasswordResetToken.findOneAndUpdate(
+      { userId },
+      { $set: { hashedToken, expiresAt } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
+
+  async consumePasswordResetToken(hashedToken) {
+    return PasswordResetToken.findOneAndDelete({
+      hashedToken,
+      expiresAt: { $gt: new Date() },
+    });
+  }
+
+  async deletePasswordResetToken(userId) {
+    return PasswordResetToken.deleteOne({ userId });
   }
 
   // Increment failed login attempts

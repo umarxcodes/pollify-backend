@@ -4,9 +4,22 @@ import { hashOTP } from "../utils/otp.util.js";
 import VerificationToken from "../models/VerificationToken.js";
 import { ApiError } from "../utils/apiError.js";
 import { env } from "../config/env.js";
+import { verificationEmail } from "./mail.templates.js";
 
 class OTPService {
-  async sendVerificationOtp(userId, email, name) {
+  async sendVerificationOtp(userId, email, name, enforceCooldown = false) {
+    const existing = await VerificationToken.findOne({ userId });
+    if (
+      enforceCooldown &&
+      existing?.sentAt &&
+      Date.now() - existing.sentAt.getTime() <
+        env.otpResendCooldownSeconds * 1000
+    ) {
+      throw new ApiError(
+        429,
+        "Please wait before requesting another verification code"
+      );
+    }
     const plainOtp = generateOTP();
     const hashedOtp = await hashOTP(plainOtp);
     const otpExpiry = new Date(Date.now() + env.otpExpiryMinutes * 60 * 1000);
@@ -19,6 +32,7 @@ class OTPService {
           expiresAt: otpExpiry,
           attempts: 0,
           isUsed: false,
+          sentAt: new Date(),
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true }
@@ -26,24 +40,9 @@ class OTPService {
 
     const expiryText = `${env.otpExpiryMinutes} minute${env.otpExpiryMinutes === 1 ? "" : "s"}`;
 
-    const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-        <h2 style="color: #2563eb;">Verify Your Pollify Account</h2>
-        <p>Hello <strong>${name}</strong>,</p>
-        <p>Welcome to Pollify. Your verification code is:</p>
-        <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #2563eb;">${plainOtp}</p>
-        <p>This OTP expires in ${expiryText}.</p>
-        <p>If you didn't create this account, ignore this email.</p>
-        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0;">
-        <p style="color: #888; font-size: 14px;">Regards,<br>Pollify Team</p>
-      </div>
-    `;
-
     await mailService.sendMail({
       to: email,
-      subject: "Verify Your Pollify Account",
-      text: `Your OTP is ${plainOtp}. It expires in ${expiryText}.`,
-      html: htmlContent,
+      ...verificationEmail(name, plainOtp, expiryText),
     });
 
     return verificationToken;

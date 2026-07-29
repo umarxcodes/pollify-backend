@@ -3,7 +3,7 @@ import { env } from "../config/env.js";
 export const setAuthCookies = (res, accessToken, refreshToken) => {
   const cookieOptions = {
     httpOnly: true,
-    secure: env.nodeEnv === "production",
+    secure: env.cookieSecure,
     sameSite: "lax",
     path: "/",
   };
@@ -22,14 +22,14 @@ export const setAuthCookies = (res, accessToken, refreshToken) => {
 export const clearAuthCookies = (res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: env.nodeEnv === "production",
+    secure: env.cookieSecure,
     sameSite: "lax",
     path: "/",
   });
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: env.nodeEnv === "production",
+    secure: env.cookieSecure,
     sameSite: "lax",
     path: "/",
   });

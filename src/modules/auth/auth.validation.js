@@ -115,3 +115,75 @@ export const loginValidation = z.object({
     })
     .strict(),
 });
+
+const passwordSchema = z
+  .string()
+  .min(8, { message: "Password must be at least 8 characters" })
+  .regex(/[A-Z]/, "Password must contain an uppercase letter")
+  .regex(/[a-z]/, "Password must contain a lowercase letter")
+  .regex(/[0-9]/, "Password must contain a number")
+  .regex(/[^A-Za-z0-9]/, "Password must contain a special character");
+
+export const forgotPasswordValidation = z.object({
+  body: z
+    .object({
+      email: z
+        .string()
+        .trim()
+        .toLowerCase()
+        .email("Please provide a valid email"),
+    })
+    .strict(),
+});
+export const resetPasswordValidation = z.object({
+  body: z
+    .object({
+      token: z.string().length(64, "Invalid reset token"),
+      password: passwordSchema,
+      confirmPassword: z.string(),
+    })
+    .strict()
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Passwords do not match",
+    }),
+});
+export const changePasswordValidation = z.object({
+  body: z
+    .object({
+      currentPassword: z.string().min(1, "Current password is required"),
+      newPassword: passwordSchema,
+      confirmPassword: z.string(),
+    })
+    .strict()
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Passwords do not match",
+    }),
+});
+export const updateProfileValidation = z
+  .object({
+    body: z
+      .object({
+        name: z
+          .string()
+          .trim()
+          .min(3)
+          .max(50)
+          .regex(/^[a-zA-Z\s]+$/)
+          .optional(),
+        username: z
+          .string()
+          .trim()
+          .toLowerCase()
+          .min(3)
+          .max(20)
+          .regex(/^[a-zA-Z0-9_.]+$/)
+          .optional(),
+      })
+      .strict(),
+    file: profileImageSchema,
+  })
+  .refine((data) => data.body.name || data.body.username || data.file, {
+    message: "Provide at least one profile field",
+  });

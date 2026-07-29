@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { hashOTP } from "../utils/otp.util.js";
 
 const verificationTokenSchema = new Schema(
   {
@@ -15,11 +14,6 @@ const verificationTokenSchema = new Schema(
       type: String,
       required: [true, "Hashed OTP is required"],
     },
-    plainOtp: {
-      type: String,
-      required: [true, "Plain OTP is required"],
-      select: false, // Never return in API responses
-    },
     expiresAt: {
       type: Date,
       required: [true, "Expiry date is required"],
@@ -28,11 +22,16 @@ const verificationTokenSchema = new Schema(
     attempts: {
       type: Number,
       default: 0,
-      max: [5, "Maximum verification attempts exceeded"],
+      min: 0,
     },
     isUsed: {
       type: Boolean,
       default: false,
+    },
+    sentAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
     },
   },
   {
@@ -40,13 +39,6 @@ const verificationTokenSchema = new Schema(
     versionKey: false,
   }
 );
-
-// Hash OTP before saving to the database
-verificationTokenSchema.pre("save", async function () {
-  if (this.isModified("plainOtp")) {
-    this.hashedOtp = await hashOTP(this.plainOtp);
-  }
-});
 
 // Instance method to verify candidate OTP against stored hash
 verificationTokenSchema.methods.compareOtp = async function (candidateOtp) {

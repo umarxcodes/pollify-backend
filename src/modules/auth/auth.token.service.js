@@ -1,23 +1,25 @@
-import bcrypt from "bcrypt";
 import { env } from "../../config/env.js";
 import RefreshToken from "../../models/RefreshToken.js";
+import {
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../../services/jwt.service.js";
+import { hashToken } from "../../utils/token.util.js";
+import { ApiError } from "../../utils/apiError.js";
 
 class AuthTokenService {
   async generateAndStoreRefreshToken(userId, deviceInfo = "", ipAddress = "") {
-    const from = "node:crypto";
-    const { randomBytes } = await import(from);
-    const refreshToken = randomBytes(48).toString("hex");
-
-    const hashedToken = await bcrypt.hash(refreshToken, env.otpSaltRounds);
-
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
+    const refreshToken = generateRefreshToken({
+      sub: userId.toString(),
+      type: "refresh",
+    });
+    const expiresAt = new Date(Date.now() + env.jwt.refreshExpiryMs);
 
     await RefreshToken.create({
       userId,
-      hashedRefreshToken: hashedToken,
+      hashedToken: hashToken(refreshToken),
       expiresAt,
-      deviceInfo,
+      device: deviceInfo.slice(0, 250),
       ipAddress,
     });
 
@@ -30,26 +32,40 @@ class AuthTokenService {
     deviceInfo = "",
     ipAddress = ""
   ) {
-    const tokenDoc = await RefreshToken.findOne({ userId });
-    if (!tokenDoc) {
-      throw new Error("No refresh token found");
+    let payload;
+    try {
+      payload = verifyRefreshToken(oldPlainToken);
+    } catch {
+      throw new ApiError(401, "Invalid or expired refresh token");
     }
+    if (payload.type !== "refresh" || payload.sub !== userId.toString())
+      throw new ApiError(401, "Invalid refresh token");
 
-    const isValid = await bcrypt.compare(
-      oldPlainToken,
-      tokenDoc.hashedRefreshToken
-    );
-    if (!isValid) {
-      throw new Error("Invalid refresh token");
-    }
-
-    await RefreshToken.deleteOne({ _id: tokenDoc._id });
+    const deleted = await RefreshToken.deleteOne({
+      userId,
+      hashedToken: hashToken(oldPlainToken),
+      expiresAt: { $gt: new Date() },
+    });
+    if (deleted.deletedCount !== 1)
+      throw new ApiError(401, "Invalid or expired refresh token");
 
     return this.generateAndStoreRefreshToken(userId, deviceInfo, ipAddress);
   }
 
-  async revokeRefreshToken(userId) {
+  async revokeAllRefreshTokens(userId) {
     await RefreshToken.deleteMany({ userId });
+  }
+
+  async revokeRefreshToken(token) {
+    try {
+      const payload = verifyRefreshToken(token);
+      await RefreshToken.deleteOne({
+        userId: payload.sub,
+        hashedToken: hashToken(token),
+      });
+    } catch {
+      // Logout is intentionally idempotent and must not expose token validity.
+    }
   }
 }
 

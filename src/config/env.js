@@ -20,13 +20,21 @@ export const env = Object.freeze({
   otpSaltRounds: integer(process.env.OTP_SALT_ROUNDS, 10),
   otpExpiryMinutes: integer(process.env.OTP_EXPIRY_IN_MINUTES, 10),
   otpMaxAttempts: integer(process.env.OTP_MAX_ATTEMPTS, 5),
+  otpResendCooldownSeconds: integer(
+    process.env.OTP_RESEND_COOLDOWN_SECONDS,
+    60
+  ),
   jwt: {
-    accessSecret: process.env.JWT_ACCESS_SECRET || "access_secret",
-    refreshSecret: process.env.JWT_REFRESH_SECRET || "refresh_secret",
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
     accessExpiry: process.env.JWT_ACCESS_EXPIRY || "15m",
     refreshExpiry: process.env.JWT_REFRESH_EXPIRY || "7d",
     refreshExpiryMs: 7 * 24 * 60 * 60 * 1000,
   },
+  frontendUrl: process.env.FRONTEND_URL,
+  cookieSecure:
+    process.env.COOKIE_SECURE === "true" ||
+    process.env.NODE_ENV === "production",
   login: {
     maxAttempts: integer(process.env.LOGIN_MAX_ATTEMPTS, 5),
     lockMinutes: integer(process.env.LOGIN_LOCK_MINUTES, 15),

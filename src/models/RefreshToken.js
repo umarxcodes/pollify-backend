@@ -8,7 +8,7 @@ const refreshTokenSchema = new Schema(
       required: [true, "User reference is required"],
       index: true,
     },
-    hashedRefreshToken: {
+    hashedToken: {
       type: String,
       required: [true, "Hashed refresh token is required"],
     },
@@ -17,7 +17,7 @@ const refreshTokenSchema = new Schema(
       required: [true, "Expiry date is required"],
       index: { expireAfterSeconds: 0 },
     },
-    deviceInfo: {
+    device: {
       type: String,
       default: "",
     },

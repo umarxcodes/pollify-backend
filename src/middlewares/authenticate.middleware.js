@@ -1,5 +1,5 @@
-import { verifyAccessToken } from "../../services/jwt.service.js";
-import { ApiError } from "../../utils/apiError.js";
+import { verifyAccessToken } from "../services/jwt.service.js";
+import { ApiError } from "../utils/apiError.js";
 
 export const authenticate = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ export const authenticate = async (req, res, next) => {
     }
 
     const decoded = verifyAccessToken(token);
-    req.user = decoded;
+    req.user = { id: decoded.userId || decoded.sub, role: decoded.role };
     next();
   } catch {
     next(new ApiError(401, "Invalid or expired token"));

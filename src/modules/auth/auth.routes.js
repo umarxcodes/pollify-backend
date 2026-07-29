@@ -7,7 +7,12 @@ import {
   verifyEmailValidation,
   resendVerificationValidation,
   loginValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation,
+  changePasswordValidation,
+  updateProfileValidation,
 } from "./auth.validation.js";
+import { authenticate } from "../../middlewares/authenticate.middleware.js";
 
 const router = Router();
 
@@ -83,6 +88,41 @@ router.post(
   "/resend-verification",
   validate(resendVerificationValidation),
   authController.resendVerificationEmail
+);
+
+router.post(
+  "/resend-otp",
+  registerRateLimiter,
+  validate(resendVerificationValidation),
+  authController.resendVerificationEmail
+);
+router.post("/refresh-token", authController.refreshToken);
+router.post("/logout", authController.logout);
+router.post(
+  "/forgot-password",
+  loginRateLimiter,
+  validate(forgotPasswordValidation),
+  authController.forgotPassword
+);
+router.post(
+  "/reset-password",
+  loginRateLimiter,
+  validate(resetPasswordValidation),
+  authController.resetPassword
+);
+router.patch(
+  "/change-password",
+  authenticate,
+  validate(changePasswordValidation),
+  authController.changePassword
+);
+router.get("/me", authenticate, authController.me);
+router.patch(
+  "/profile",
+  authenticate,
+  upload.single("profileImage"),
+  validate(updateProfileValidation),
+  authController.updateProfile
 );
 
 export default router;
