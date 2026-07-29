@@ -75,7 +75,7 @@ router.post(
   authController.resendVerificationEmail
 );
 router.post("/refresh-token", authController.refreshToken);
-router.post("/logout", authController.logout);
+router.post("/logout", authenticate, authController.logout);
 router.post(
   "/forgot-password",
   loginRateLimiter,

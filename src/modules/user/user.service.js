@@ -37,7 +37,13 @@ class UserService {
       }
     }
 
-    const user = await userRepository.updateUser(userId, data);
+    const updates = { ...data };
+    if (updates.fullName) {
+      updates.name = updates.fullName;
+      delete updates.fullName;
+    }
+
+    const user = await userRepository.updateUser(userId, updates);
     if (!user) throw new ApiError(404, "User not found");
     return Response.success(200, { user }, "Profile updated successfully");
   }

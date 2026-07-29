@@ -122,6 +122,10 @@ class AuthService {
       );
     }
 
+    if (user.isSuspended) {
+      throw new ApiError(403, "This account is suspended");
+    }
+
     // Check if email is verified
     if (!user.isVerified) {
       throw new ApiError(403, "Please verify your email before logging in.");

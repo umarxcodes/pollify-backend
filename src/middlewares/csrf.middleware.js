@@ -26,6 +26,10 @@ export const verifyCsrfToken = (req, res, next) => {
     return next();
   }
 
+  if (!req.cookies?.accessToken) {
+    return next();
+  }
+
   const cookieToken = req.cookies?.[CSRF_COOKIE_NAME];
   const headerToken = req.headers[CSRF_HEADER_NAME];
 

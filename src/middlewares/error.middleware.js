@@ -9,12 +9,16 @@ export const notFound = (req, res, next) => {
 export const errorHandler = (err, req, res, _next) => {
   const duplicateKey = err?.code === 11000;
   const validationError = err?.name === "ValidationError";
+  const castError = err?.name === "CastError";
 
   let statusCode = 500;
   let message = "Internal Server Error";
   let errors = err.errors;
 
-  if (duplicateKey) {
+  if (castError) {
+    statusCode = 400;
+    message = "Invalid ID format";
+  } else if (duplicateKey) {
     statusCode = 409;
     message = "An account with those details already exists";
   } else if (validationError) {
