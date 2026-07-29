@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import "./config/env.js";
 import { env } from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
+import userRoutes from "./modules/user/user.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 
 const logger = pino({
@@ -83,6 +84,7 @@ app.get("/", (req, res) => {
 
 // Feature routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // Multer file upload error handler
 app.use((error, req, res, next) => {

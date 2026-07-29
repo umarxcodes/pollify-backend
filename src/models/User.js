@@ -49,6 +49,31 @@ const userSchema = new Schema(
       default:
         "https://res.cloudinary.com/dlul8f6xz/image/upload/v1/default_avatar",
     },
+    bio: {
+      type: String,
+      maxlength: [300, "Bio must be at most 300 characters"],
+      default: "",
+    },
+    website: {
+      type: String,
+      default: "",
+    },
+    github: {
+      type: String,
+      default: "",
+    },
+    linkedin: {
+      type: String,
+      default: "",
+    },
+    twitter: {
+      type: String,
+      default: "",
+    },
+    location: {
+      type: String,
+      default: "",
+    },
     role: {
       type: String,
       enum: ["user", "admin", "moderator"],
@@ -58,6 +83,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
       index: true, // Frequent filter for auth checks
+    },
+    lastActive: {
+      type: Date,
+      default: Date.now,
     },
     loginAttempts: {
       type: Number,
