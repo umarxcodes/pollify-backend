@@ -1,11 +1,11 @@
-# Pollify - Registration Backend
+# Pollify - Authentication Backend
 
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
 ![Express](https://img.shields.io/badge/Express-5.x-black)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-A production-ready enterprise backend for the Pollify polling web application, featuring a complete registration module with email verification, built with Clean Architecture, SOLID principles, and enterprise-grade security standards.
+A production-ready enterprise backend for the Pollify polling web application, featuring a complete authentication module with registration, email verification, login, JWT tokens, and account security, built with Clean Architecture, SOLID principles, and enterprise-grade security standards.
 
 ---
 
@@ -17,24 +17,41 @@ A production-ready enterprise backend for the Pollify polling web application, f
 4. [Getting Started](#getting-started)
 5. [Environment Variables](#environment-variables)
 6. [API Documentation](#api-documentation)
-7. [Authentication & Email Verification Flow](#authentication--email-verification-flow)
-8. [Security Features](#security-features)
-9. [Database Models](#database-models)
-10. [Utilities & Services](#utilities--services)
-11. [Contributing](#contributing)
+7. [Registration & Email Verification Flow](#registration--email-verification-flow)
+8. [Login & JWT Authentication Flow](#login--jwt-authentication-flow)
+9. [Security Features](#security-features)
+10. [Database Models](#database-models)
+11. [Utilities & Services](#utilities--services)
+12. [Rate Limits](#rate-limits)
+13. [Error Codes](#error-codes)
+14. [CI/CD](#cicd)
+15. [Contributing](#contributing)
 
 ---
 
 ## Features
 
+### Registration & Verification
 - **User Registration** with comprehensive field validation
 - **Email Verification** via OTP (One-Time Password)
 - **Profile Image Upload** with magic-byte validation
 - **Duplicate Detection** for username and email
 - **Secure Password Hashing** using bcrypt
-- **Rate Limiting** on registration endpoint
+
+### Authentication & Authorization
+- **Login** with username/email + password
+- **JWT Access Tokens** (15 minutes expiry)
+- **Refresh Tokens** with secure HttpOnly cookies (7 days expiry)
+- **Account Lockout** after multiple failed login attempts
+- **Login Activity Logging** with IP and user agent tracking
+- **Last Login Timestamp** tracking
+- **Protected Route Middleware** for authenticated endpoints
+
+### Security & Infrastructure
+- **Rate Limiting** on all sensitive endpoints
 - **NoSQL Injection Protection** via mongo-sanitize
 - **CORS Protection** with configurable allowed origins
+- **Helmet Security Headers** for HTTP security
 - **Structured Logging** with Pino
 - **Graceful Shutdown** for production deployments
 - **Centralized Error Handling** with consistent response format
@@ -53,7 +70,7 @@ A production-ready enterprise backend for the Pollify polling web application, f
 | Email Service | Nodemailer with SMTP |
 | Validation | Zod |
 | Logging | Pino + pino-http |
-| Security | Helmet, CORS, mongo-sanitize |
+| Security | Helmet, CORS, mongo-sanitize, cookie-parser |
 | Rate Limiting | express-rate-limit |
 | File Upload | Multer |
 | Package Manager | Yarn |
@@ -69,10 +86,12 @@ src/
 │   ├── env.js             # Centralized environment configuration
 │   └── mail.config.js     # SMTP/Nodemailer configuration
 ├── middlewares/
-│   ├── error.middleware.js  # Centralized error handling
+│   ├── authenticate.middleware.js # JWT authentication for protected routes
+│   ├── error.middleware.js    # Centralized error handling
 │   └── validate.middleware.js # Zod validation middleware
 ├── models/
 │   ├── User.js                # Mongoose User schema
+│   ├── RefreshToken.js        # Mongoose RefreshToken schema
 │   └── VerificationToken.js   # Mongoose OTP token schema
 ├── modules/
 │   └── auth/
@@ -80,12 +99,15 @@ src/
 │       ├── auth.repository.js   # Database access layer
 │       ├── auth.routes.js       # Route definitions
 │       ├── auth.service.js      # Business logic
+│       ├── auth.token.service.js # Refresh token management
 │       └── auth.validation.js   # Zod validation schemas
 ├── services/
+│   ├── jwt.service.js    # JWT access/refresh token generation
 │   ├── mail.service.js   # Nodemailer email service
 │   └── otp.service.js    # OTP generation and verification
 ├── utils/
 │   ├── apiError.js           # Custom API error class
+│   ├── cookie.util.js        # HttpOnly Secure cookie management
 │   ├── generateOTP.js        # Cryptographically secure OTP generation
 │   ├── logger.js             # Pino logger instance
 │   ├── otp.util.js           # OTP hashing and verification utilities
@@ -131,6 +153,7 @@ yarn start      # Start server with node (production)
 yarn lint       # Run ESLint
 yarn lint:fix   # Run ESLint with auto-fix
 yarn format     # Run Prettier
+yarn health     # Check API health endpoint
 ```
 
 ---
@@ -161,6 +184,16 @@ BCRYPT_SALT_ROUNDS=12
 OTP_SALT_ROUNDS=10
 OTP_EXPIRY_IN_MINUTES=10
 OTP_MAX_ATTEMPTS=5
+
+# JWT Configuration
+JWT_ACCESS_SECRET=your_jwt_access_secret_here_change_in_production
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_here_change_in_production
+JWT_ACCESS_EXPIRY=15m
+JWT_REFRESH_EXPIRY=7d
+
+# Login Security
+LOGIN_MAX_ATTEMPTS=5
+LOGIN_LOCK_MINUTES=15
 ```
 
 ---
@@ -232,15 +265,12 @@ Content-Type: multipart/form-data
 ```
 
 **Error Responses:**
-
 ```json
 // 400 - Validation Error
 {
   "success": false,
   "message": "Validation failed",
-  "errors": [
-    "Password must contain at least one uppercase letter"
-  ]
+  "errors": ["Password must contain at least one uppercase letter"]
 }
 
 // 409 - Username already exists
@@ -329,7 +359,88 @@ Content-Type: application/json
 
 ---
 
-## Authentication & Email Verification Flow
+### 4. Login
+
+Authenticates a user with username/email and password. Returns JWT access token, refresh token, and user information. Supports both username and email as identifier.
+
+```http
+POST /auth/login
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "identifier": "muhammadumar",
+  "password": "Umar@123"
+}
+```
+or
+```json
+{
+  "identifier": "muhammad@gmail.com",
+  "password": "Umar@123"
+}
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Login successful.",
+  "data": {
+    "user": {
+      "id": "...",
+      "name": "...",
+      "username": "...",
+      "email": "...",
+      "profileImage": "...",
+      "role": "user"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "1653c5bfc8d1b5de673ea1b467212b23..."
+  }
+}
+```
+
+**Error Responses:**
+```json
+// 400 - Validation Error
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": ["identifier: Invalid input: expected string, received undefined"]
+}
+
+// 401 - Invalid credentials
+{
+  "success": false,
+  "message": "Invalid username/email or password."
+}
+
+// 403 - Email not verified
+{
+  "success": false,
+  "message": "Please verify your email before logging in."
+}
+
+// 423 - Account locked
+{
+  "success": false,
+  "message": "Account locked due to multiple failed attempts. Try again in 15 minutes."
+}
+
+// 429 - Too many attempts
+{
+  "success": false,
+  "message": "Too many login attempts. Please try again later."
+}
+```
+
+---
+
+## Registration & Email Verification Flow
 
 ```
 ┌─────────────────┐
@@ -445,6 +556,73 @@ Content-Type: application/json
 
 ---
 
+## Login & JWT Authentication Flow
+
+```
+┌─────────────────┐
+│   Frontend      │
+│   Login Form    │
+└────────┬────────┘
+         │
+         │ 1. Enter Username/Email + Password
+         │    (identifier: "muhammadumar" OR "muhammad@gmail.com")
+         │
+         ▼
+┌─────────────────┐
+│  POST /login    │
+│  { identifier,  │
+│    password }   │
+└────────┬────────┘
+         │
+         │ 2. Validate Request (Zod)
+         │    - identifier: required, trimmed
+         │    - password: required, min 8 chars
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Find User by Username or Email         │
+│  Auto-detect input type                 │
+└────────┬────────────────────────────────┘
+         │
+         │ 3. User lookup
+         │    - If not found → 401 "Invalid username/email or password."
+         │    - If locked → 423 "Account locked..."
+         │    - If unverified → 403 "Please verify your email..."
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Compare Password (bcrypt.compare)      │
+└────────┬────────────────────────────────┘
+         │
+         │ 4. Password check
+         │    - If invalid → increment attempts
+         │    - If attempts >= 5 → lock account for 15 minutes
+         │    - Generic error message (prevents enumeration)
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Generate Tokens                        │
+│  - Access Token: 15 minutes (JWT)       │
+│  - Refresh Token: 7 days (random hex)   │
+└────────┬────────────────────────────────┘
+         │
+         │ 5. Hash refresh token with bcrypt
+         │    Store hashed token in RefreshToken collection
+         │    Set HttpOnly Secure SameSite cookies
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Return Success (200 OK)                │
+│  - user info (id, name, username,       │
+│    email, profileImage, role)            │
+│  - accessToken                           │
+│  - refreshToken                          │
+│  - Set-Cookie headers                    │
+└─────────────────────────────────────────┘
+```
+
+---
+
 ## Security Features
 
 ### 1. Password Security
@@ -452,29 +630,44 @@ Content-Type: application/json
 - Original passwords are never stored or returned in API responses
 - `select: false` on password field prevents accidental exposure in queries
 
-### 2. OTP Security
+### 2. JWT & Token Security
+- **Access tokens** expire in 15 minutes
+- **Refresh tokens** expire in 7 days
+- Refresh tokens are **hashed with bcrypt** before database storage
+- Tokens are transmitted via **HttpOnly Secure SameSite cookies**
+- Generic error messages prevent user enumeration attacks
+
+### 3. Account Security
+- **Account lockout** after 5 failed login attempts (15 minute lock)
+- **Login activity logging** with IP address and user agent
+- **Last login timestamp** tracking
+- **Failed attempt counter** resets on successful login
+
+### 4. OTP Security
 - OTPs are generated using **crypto.randomInt()** (cryptographically secure)
 - OTPs are **hashed with bcrypt** before storage (never stored in plaintext)
 - Maximum **5 verification attempts** per OTP
 - **10-minute expiry** with MongoDB TTL index for automatic cleanup
 - Single-use tokens (`isUsed` flag prevents replay attacks)
 
-### 3. Input Validation
+### 5. Input Validation
 - **Zod schemas** validate all incoming data with strict type checking
 - **MongoDB sanitization** prevents NoSQL injection attacks
 - **Magic-byte validation** ensures uploaded files are actually images (prevents MIME spoofing)
 - File size limits (2MB) enforced at Multer level
 
-### 4. Rate Limiting
+### 6. Rate Limiting
 - **Global rate limiter**: 100 requests per 15 minutes per IP
-- **Registration-specific limiter**: 5 attempts per 15 minutes per IP (prevents brute-force registration attacks)
+- **Registration-specific limiter**: 5 attempts per 15 minutes per IP
+- **Login-specific limiter**: 10 attempts per 15 minutes per IP
 
-### 5. HTTP Security
+### 7. HTTP Security
 - **Helmet** sets security headers: CSP, HSTS, X-Frame-Options, X-Content-Type-Options
 - **CORS** with strict origin allowlist (configurable via `CORS_ORIGIN`)
+- **Cookie parser** for secure JWT token handling
 - **Request size limits** (10kb for JSON) prevent payload attacks
 
-### 6. Error Handling
+### 8. Error Handling
 - No stack traces exposed in production
 - Consistent error response format
 - Centralized error handler catches all exceptions
@@ -496,6 +689,16 @@ Content-Type: application/json
   profileImage: String,   // base64 data URI or default avatar URL
   role: String,           // "user" | "admin" | "moderator" (default: "user")
   isVerified: Boolean,    // default: false, indexed
+  loginAttempts: Number,  // default: 0, tracks failed login attempts
+  lockedUntil: Date,      // account lock expiration
+  lastLogin: Date,        // last successful login timestamp
+  loginActivity: [        // login history log
+    {
+      timestamp: Date,
+      ipAddress: String,
+      userAgent: String
+    }
+  ],
   createdAt: Date,        // auto-generated
   updatedAt: Date         // auto-generated
 }
@@ -505,6 +708,25 @@ Content-Type: application/json
 - `username` (unique)
 - `email` (unique)
 - `isVerified` (for fast auth lookups)
+
+### RefreshToken
+
+```javascript
+{
+  _id: ObjectId,
+  userId: ObjectId,       // reference to User, indexed
+  hashedRefreshToken: String, // bcrypt hashed refresh token
+  expiresAt: Date,        // TTL index for auto-cleanup (7 days)
+  deviceInfo: String,     // optional device information
+  ipAddress: String,      // IP address at login
+  createdAt: Date,        // auto-generated
+  updatedAt: Date         // auto-generated
+}
+```
+
+**Indexes:**
+- `userId` - for fast user token lookups
+- `expiresAt` (TTL) - MongoDB auto-deletes expired tokens
 
 ### VerificationToken
 
@@ -542,6 +764,26 @@ Handles OTP lifecycle:
 - `sendVerificationOtp()` - Generates, hashes, stores, and emails OTP
 - `verifyVerificationOtp()` - Validates OTP, tracks attempts, marks as used
 
+### JWT Service (`src/services/jwt.service.js`)
+JWT token generation and verification:
+- `generateAccessToken()` - Creates short-lived access tokens
+- `generateRefreshToken()` - Creates long-lived refresh tokens
+- `verifyAccessToken()` - Verifies and decodes access tokens
+- `verifyRefreshToken()` - Verifies and decodes refresh tokens
+
+### Auth Token Service (`src/modules/auth/auth.token.service.js`)
+Refresh token lifecycle management:
+- `generateAndStoreRefreshToken()` - Creates and stores hashed refresh tokens
+- `rotateRefreshToken()` - Implements refresh token rotation for security
+- `revokeRefreshToken()` - Revokes all tokens for a user
+
+### Cookie Utility (`src/utils/cookie.util.js`)
+Secure cookie management:
+- `setAuthCookies()` - Sets HttpOnly Secure SameSite cookies for tokens
+- `clearAuthCookies()` - Clears authentication cookies on logout
+- `getAccessTokenFromCookies()` - Extracts access token from cookies
+- `getRefreshTokenFromCookies()` - Extracts refresh token from cookies
+
 ### Response Utility (`src/utils/response.js`)
 Consistent API response formatter:
 ```javascript
@@ -567,6 +809,7 @@ Pino logger instance with environment-aware log levels:
 |----------|-------|--------|
 | Global API | 100 requests | 15 minutes |
 | POST /auth/register | 5 requests | 15 minutes |
+| POST /auth/login | 10 requests | 15 minutes |
 
 ---
 
@@ -576,13 +819,38 @@ Pino logger instance with environment-aware log levels:
 |-------------|---------|
 | 200 | Success |
 | 201 | Created (registration successful) |
+| 202 | Accepted (resend verification) |
 | 400 | Validation Error |
+| 401 | Unauthorized (invalid credentials) |
+| 403 | Forbidden (email not verified) |
 | 404 | Not Found |
 | 409 | Conflict (duplicate username/email) |
 | 413 | Payload Too Large (file exceeds 2MB) |
-| 422 | Unprocessable Entity |
+| 423 | Locked (account locked due to failed attempts) |
 | 429 | Too Many Requests (rate limit exceeded) |
 | 500 | Internal Server Error |
+
+---
+
+## CI/CD
+
+The project uses GitHub Actions for continuous integration.
+
+**Workflow Triggers:**
+- Push to `main` or `development` branches
+- Pull requests targeting `main` or `development` branches
+
+**CI Pipeline Steps:**
+1. Checkout repository
+2. Setup Node.js 22 with Yarn cache
+3. Install dependencies with `yarn install --frozen-lockfile`
+4. Run ESLint (`yarn lint`)
+5. Run format check (`yarn format --check`)
+6. Run security audit (`yarn audit --level moderate`)
+7. Upload source code artifact (7 day retention)
+
+**To view CI status:**
+Visit the `Actions` tab in the GitHub repository.
 
 ---
 
@@ -598,7 +866,9 @@ Pino logger instance with environment-aware log levels:
 - Follow ESLint and Prettier configurations
 - Write meaningful commit messages (Conventional Commits)
 - Add JSDoc comments for public methods
-- Ensure all tests pass before submitting PR
+- Ensure all CI checks pass before submitting PR
+- Follow Clean Architecture and SOLID principles
+- Write modular, reusable, and testable code
 
 ---
 
