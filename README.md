@@ -32,6 +32,7 @@ A production-ready enterprise backend for the Pollify polling web application, f
 ## Features
 
 ### Registration & Verification
+
 - **User Registration** with comprehensive field validation
 - **Email Verification** via OTP (One-Time Password)
 - **Profile Image Upload** with magic-byte validation
@@ -39,6 +40,7 @@ A production-ready enterprise backend for the Pollify polling web application, f
 - **Secure Password Hashing** using bcrypt
 
 ### Authentication & Authorization
+
 - **Login** with username/email + password
 - **JWT Access Tokens** (15 minutes expiry)
 - **Refresh Tokens** with secure HttpOnly cookies (7 days expiry)
@@ -48,6 +50,7 @@ A production-ready enterprise backend for the Pollify polling web application, f
 - **Protected Route Middleware** for authenticated endpoints
 
 ### Security & Infrastructure
+
 - **Rate Limiting** on all sensitive endpoints
 - **NoSQL Injection Protection** via mongo-sanitize
 - **CORS Protection** with configurable allowed origins
@@ -61,19 +64,19 @@ A production-ready enterprise backend for the Pollify polling web application, f
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| Runtime | Node.js 18+ |
-| Framework | Express.js 5.x |
-| Database | MongoDB with Mongoose 9.x |
-| Authentication | JWT, bcrypt |
-| Email Service | Nodemailer with SMTP |
-| Validation | Zod |
-| Logging | Pino + pino-http |
-| Security | Helmet, CORS, mongo-sanitize, cookie-parser |
-| Rate Limiting | express-rate-limit |
-| File Upload | Multer |
-| Package Manager | Yarn |
+| Category        | Technology                                  |
+| --------------- | ------------------------------------------- |
+| Runtime         | Node.js 18+                                 |
+| Framework       | Express.js 5.x                              |
+| Database        | MongoDB with Mongoose 9.x                   |
+| Authentication  | JWT, bcrypt                                 |
+| Email Service   | Nodemailer with SMTP                        |
+| Validation      | Zod                                         |
+| Logging         | Pino + pino-http                            |
+| Security        | Helmet, CORS, mongo-sanitize, cookie-parser |
+| Rate Limiting   | express-rate-limit                          |
+| File Upload     | Multer                                      |
+| Package Manager | Yarn                                        |
 
 ---
 
@@ -201,6 +204,7 @@ LOGIN_LOCK_MINUTES=15
 ## API Documentation
 
 ### Base URL
+
 ```
 http://localhost:5000/api/v1
 ```
@@ -212,6 +216,7 @@ GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -233,17 +238,18 @@ Content-Type: multipart/form-data
 
 **Request Body (form-data):**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | string | Yes | Full name (3-50 chars, letters and spaces only) |
-| `username` | string | Yes | Username (3-20 chars, lowercase, alphanumeric + `_` + `.`) |
-| `email` | string | Yes | Valid email address |
-| `password` | string | Yes | Min 8 chars, must contain upper, lower, number, special char |
-| `confirmPassword` | string | Yes | Must match password |
-| `terms` | string | Yes | Must be `"true"` |
-| `profileImage` | file | No | Optional profile image (jpg, jpeg, png, webp, max 2MB) |
+| Field             | Type   | Required | Description                                                  |
+| ----------------- | ------ | -------- | ------------------------------------------------------------ |
+| `name`            | string | Yes      | Full name (3-50 chars, letters and spaces only)              |
+| `username`        | string | Yes      | Username (3-20 chars, lowercase, alphanumeric + `_` + `.`)   |
+| `email`           | string | Yes      | Valid email address                                          |
+| `password`        | string | Yes      | Min 8 chars, must contain upper, lower, number, special char |
+| `confirmPassword` | string | Yes      | Must match password                                          |
+| `terms`           | string | Yes      | Must be `"true"`                                             |
+| `profileImage`    | file   | No       | Optional profile image (jpg, jpeg, png, webp, max 2MB)       |
 
 **Success Response (201 Created):**
+
 ```json
 {
   "success": true,
@@ -265,6 +271,7 @@ Content-Type: multipart/form-data
 ```
 
 **Error Responses:**
+
 ```json
 // 400 - Validation Error
 {
@@ -304,6 +311,7 @@ Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -312,6 +320,7 @@ Content-Type: application/json
 ```
 
 **Success Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -322,6 +331,7 @@ Content-Type: application/json
 ```
 
 **Error Response (400):**
+
 ```json
 {
   "success": false,
@@ -341,6 +351,7 @@ Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com"
@@ -348,6 +359,7 @@ Content-Type: application/json
 ```
 
 **Success Response (202 Accepted):**
+
 ```json
 {
   "success": true,
@@ -369,13 +381,16 @@ Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "identifier": "muhammadumar",
   "password": "Umar@123"
 }
 ```
+
 or
+
 ```json
 {
   "identifier": "muhammad@gmail.com",
@@ -384,6 +399,7 @@ or
 ```
 
 **Success Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -405,6 +421,7 @@ or
 ```
 
 **Error Responses:**
+
 ```json
 // 400 - Validation Error
 {
@@ -626,11 +643,13 @@ or
 ## Security Features
 
 ### 1. Password Security
+
 - Passwords are hashed using **bcrypt** with configurable salt rounds (default: 12)
 - Original passwords are never stored or returned in API responses
 - `select: false` on password field prevents accidental exposure in queries
 
 ### 2. JWT & Token Security
+
 - **Access tokens** expire in 15 minutes
 - **Refresh tokens** expire in 7 days
 - Refresh tokens are **hashed with bcrypt** before database storage
@@ -638,12 +657,14 @@ or
 - Generic error messages prevent user enumeration attacks
 
 ### 3. Account Security
+
 - **Account lockout** after 5 failed login attempts (15 minute lock)
 - **Login activity logging** with IP address and user agent
 - **Last login timestamp** tracking
 - **Failed attempt counter** resets on successful login
 
 ### 4. OTP Security
+
 - OTPs are generated using **crypto.randomInt()** (cryptographically secure)
 - OTPs are **hashed with bcrypt** before storage (never stored in plaintext)
 - Maximum **5 verification attempts** per OTP
@@ -651,23 +672,27 @@ or
 - Single-use tokens (`isUsed` flag prevents replay attacks)
 
 ### 5. Input Validation
+
 - **Zod schemas** validate all incoming data with strict type checking
 - **MongoDB sanitization** prevents NoSQL injection attacks
 - **Magic-byte validation** ensures uploaded files are actually images (prevents MIME spoofing)
 - File size limits (2MB) enforced at Multer level
 
 ### 6. Rate Limiting
+
 - **Global rate limiter**: 100 requests per 15 minutes per IP
 - **Registration-specific limiter**: 5 attempts per 15 minutes per IP
 - **Login-specific limiter**: 10 attempts per 15 minutes per IP
 
 ### 7. HTTP Security
+
 - **Helmet** sets security headers: CSP, HSTS, X-Frame-Options, X-Content-Type-Options
 - **CORS** with strict origin allowlist (configurable via `CORS_ORIGIN`)
 - **Cookie parser** for secure JWT token handling
 - **Request size limits** (10kb for JSON) prevent payload attacks
 
 ### 8. Error Handling
+
 - No stack traces exposed in production
 - Consistent error response format
 - Centralized error handler catches all exceptions
@@ -705,6 +730,7 @@ or
 ```
 
 **Indexes:**
+
 - `username` (unique)
 - `email` (unique)
 - `isVerified` (for fast auth lookups)
@@ -725,6 +751,7 @@ or
 ```
 
 **Indexes:**
+
 - `userId` - for fast user token lookups
 - `expiresAt` (TTL) - MongoDB auto-deletes expired tokens
 
@@ -745,6 +772,7 @@ or
 ```
 
 **Indexes:**
+
 - `userId` (unique) - ensures one active token per user
 - `expiresAt` (TTL) - MongoDB auto-deletes expired tokens
 
@@ -753,51 +781,67 @@ or
 ## Utilities & Services
 
 ### Mail Service (`src/services/mail.service.js`)
+
 Singleton service that handles all email operations:
+
 - Creates Nodemailer transporter with SMTP configuration
 - Validates SMTP credentials on initialization
 - Supports HTML and plain text email templates
 - Sends verification emails with branded HTML template
 
 ### OTP Service (`src/services/otp.service.js`)
+
 Handles OTP lifecycle:
+
 - `sendVerificationOtp()` - Generates, hashes, stores, and emails OTP
 - `verifyVerificationOtp()` - Validates OTP, tracks attempts, marks as used
 
 ### JWT Service (`src/services/jwt.service.js`)
+
 JWT token generation and verification:
+
 - `generateAccessToken()` - Creates short-lived access tokens
 - `generateRefreshToken()` - Creates long-lived refresh tokens
 - `verifyAccessToken()` - Verifies and decodes access tokens
 - `verifyRefreshToken()` - Verifies and decodes refresh tokens
 
 ### Auth Token Service (`src/modules/auth/auth.token.service.js`)
+
 Refresh token lifecycle management:
+
 - `generateAndStoreRefreshToken()` - Creates and stores hashed refresh tokens
 - `rotateRefreshToken()` - Implements refresh token rotation for security
 - `revokeRefreshToken()` - Revokes all tokens for a user
 
 ### Cookie Utility (`src/utils/cookie.util.js`)
+
 Secure cookie management:
+
 - `setAuthCookies()` - Sets HttpOnly Secure SameSite cookies for tokens
 - `clearAuthCookies()` - Clears authentication cookies on logout
 - `getAccessTokenFromCookies()` - Extracts access token from cookies
 - `getRefreshTokenFromCookies()` - Extracts refresh token from cookies
 
 ### Response Utility (`src/utils/response.js`)
+
 Consistent API response formatter:
+
 ```javascript
-Response.success(200, data, "Success message")
-Response.fail(400, errors, "Error message")
+Response.success(200, data, "Success message");
+Response.fail(400, errors, "Error message");
 ```
 
 ### Password Strength (`src/utils/passwordStrength.js`)
+
 Calculates password strength score (Weak/Medium/Strong) based on:
+
 - Length thresholds
 - Character variety (upper, lower, number, special)
 
 ### Logger (`src/utils/logger.js`)
+
 Pino logger instance with environment-aware log levels:
+
 - `debug` in development
 - `info` in production
 
@@ -805,30 +849,30 @@ Pino logger instance with environment-aware log levels:
 
 ## Rate Limits
 
-| Endpoint | Limit | Window |
-|----------|-------|--------|
-| Global API | 100 requests | 15 minutes |
-| POST /auth/register | 5 requests | 15 minutes |
-| POST /auth/login | 10 requests | 15 minutes |
+| Endpoint            | Limit        | Window     |
+| ------------------- | ------------ | ---------- |
+| Global API          | 100 requests | 15 minutes |
+| POST /auth/register | 5 requests   | 15 minutes |
+| POST /auth/login    | 10 requests  | 15 minutes |
 
 ---
 
 ## Error Codes
 
-| Status Code | Meaning |
-|-------------|---------|
-| 200 | Success |
-| 201 | Created (registration successful) |
-| 202 | Accepted (resend verification) |
-| 400 | Validation Error |
-| 401 | Unauthorized (invalid credentials) |
-| 403 | Forbidden (email not verified) |
-| 404 | Not Found |
-| 409 | Conflict (duplicate username/email) |
-| 413 | Payload Too Large (file exceeds 2MB) |
-| 423 | Locked (account locked due to failed attempts) |
-| 429 | Too Many Requests (rate limit exceeded) |
-| 500 | Internal Server Error |
+| Status Code | Meaning                                        |
+| ----------- | ---------------------------------------------- |
+| 200         | Success                                        |
+| 201         | Created (registration successful)              |
+| 202         | Accepted (resend verification)                 |
+| 400         | Validation Error                               |
+| 401         | Unauthorized (invalid credentials)             |
+| 403         | Forbidden (email not verified)                 |
+| 404         | Not Found                                      |
+| 409         | Conflict (duplicate username/email)            |
+| 413         | Payload Too Large (file exceeds 2MB)           |
+| 423         | Locked (account locked due to failed attempts) |
+| 429         | Too Many Requests (rate limit exceeded)        |
+| 500         | Internal Server Error                          |
 
 ---
 
@@ -837,10 +881,12 @@ Pino logger instance with environment-aware log levels:
 The project uses GitHub Actions for continuous integration.
 
 **Workflow Triggers:**
+
 - Push to `main` or `development` branches
 - Pull requests targeting `main` or `development` branches
 
 **CI Pipeline Steps:**
+
 1. Checkout repository
 2. Setup Node.js 22 with Yarn cache
 3. Install dependencies with `yarn install --frozen-lockfile`
@@ -863,6 +909,7 @@ Visit the `Actions` tab in the GitHub repository.
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow ESLint and Prettier configurations
 - Write meaningful commit messages (Conventional Commits)
 - Add JSDoc comments for public methods
