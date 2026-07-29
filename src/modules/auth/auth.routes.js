@@ -2,7 +2,11 @@ import { Router } from "express";
 import expressRateLimit from "express-rate-limit";
 import authController from "./auth.controller.js";
 import { validate } from "../../middlewares/validate.middleware.js";
-import { registerValidation } from "./auth.validation.js";
+import {
+  registerValidation,
+  verifyEmailValidation,
+  resendVerificationValidation,
+} from "./auth.validation.js";
 
 const router = Router();
 
@@ -47,6 +51,18 @@ router.post(
   upload.single("profileImage"),
   validate(registerValidation),
   authController.register
+);
+
+router.post(
+  "/verify-email",
+  validate(verifyEmailValidation),
+  authController.verifyEmail
+);
+
+router.post(
+  "/resend-verification",
+  validate(resendVerificationValidation),
+  authController.resendVerificationEmail
 );
 
 export default router;

@@ -23,8 +23,6 @@ export const validate = (schema) => {
       }
 
       req.body = parsed.data.body || req.body;
-      req.query = parsed.data.query || req.query;
-      req.params = parsed.data.params || req.params;
 
       if (parsed.data.file) {
         req.file = parsed.data.file;
