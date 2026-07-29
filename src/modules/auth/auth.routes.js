@@ -6,6 +6,7 @@ import {
   registerValidation,
   verifyEmailValidation,
   resendVerificationValidation,
+  loginValidation,
 } from "./auth.validation.js";
 
 const router = Router();
@@ -17,6 +18,18 @@ const registerRateLimiter = expressRateLimit({
   message: {
     success: false,
     message: "Too many registration attempts. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limit login to 10 attempts per 15 minutes per IP
+const loginRateLimiter = expressRateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    success: false,
+    message: "Too many login attempts. Please try again later.",
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -51,6 +64,13 @@ router.post(
   upload.single("profileImage"),
   validate(registerValidation),
   authController.register
+);
+
+router.post(
+  "/login",
+  loginRateLimiter,
+  validate(loginValidation),
+  authController.login
 );
 
 router.post(

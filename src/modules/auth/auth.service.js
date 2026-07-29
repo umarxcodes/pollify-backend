@@ -2,6 +2,9 @@ import { ApiError } from "../../utils/apiError.js";
 import { Response } from "../../utils/response.js";
 import { authRepository } from "./auth.repository.js";
 import { otpService } from "../../services/otp.service.js";
+import { generateAccessToken } from "../../services/jwt.service.js";
+import { authTokenService } from "./auth.token.service.js";
+import { env } from "../../config/env.js";
 
 class AuthService {
   // Register a new user and trigger email verification
@@ -82,6 +85,102 @@ class AuthService {
       null,
       "If an unverified account exists, a verification code has been sent."
     );
+  }
+
+  // Login user with username/email and password
+  async login({
+    identifier,
+    password,
+    rememberMe: _rememberMe = false,
+    ipAddress,
+    userAgent,
+  }) {
+    const user = await authRepository.findUserByIdentifier(identifier);
+    if (!user) {
+      throw new ApiError(401, "Invalid username/email or password.");
+    }
+
+    // Check if account is locked
+    if (user.lockedUntil && new Date() < user.lockedUntil) {
+      const remainingMinutes = Math.ceil(
+        (new Date(user.lockedUntil) - new Date()) / 60000
+      );
+      throw new ApiError(
+        423,
+        `Account locked due to multiple failed attempts. Try again in ${remainingMinutes} minutes.`
+      );
+    }
+
+    // Check if email is verified
+    if (!user.isVerified) {
+      throw new ApiError(403, "Please verify your email before logging in.");
+    }
+
+    // Compare password
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      await authRepository.incrementLoginAttempts(user._id);
+
+      const attempts = user.loginAttempts || 0;
+      if (attempts + 1 >= env.login.maxAttempts) {
+        const lockUntil = new Date();
+        lockUntil.setMinutes(lockUntil.getMinutes() + env.login.lockMinutes);
+        await authRepository.lockAccount(user._id, lockUntil);
+        throw new ApiError(
+          423,
+          `Account locked due to ${env.login.maxAttempts} failed attempts. Try again in ${env.login.lockMinutes} minutes.`
+        );
+      }
+
+      throw new ApiError(401, "Invalid username/email or password.");
+    }
+
+    // Reset login attempts on successful password check
+    await authRepository.resetLoginAttempts(user._id);
+
+    // Generate tokens
+    const payload = {
+      userId: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = await authTokenService.generateAndStoreRefreshToken(
+      user._id,
+      userAgent || "",
+      ipAddress || ""
+    );
+
+    // Update last login
+    await authRepository.updateLoginActivity(
+      user._id,
+      ipAddress || "",
+      userAgent || ""
+    );
+
+    // Prepare safe user response
+    const safeUser = {
+      id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      profileImage: user.profileImage,
+      role: user.role,
+    };
+
+    const response = Response.success(
+      200,
+      {
+        user: safeUser,
+        accessToken,
+        refreshToken,
+      },
+      "Login successful."
+    );
+
+    return response;
   }
 
   // Validate image by magic bytes to prevent MIME type spoofing

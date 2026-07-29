@@ -100,3 +100,18 @@ export const resendVerificationValidation = z.object({
     })
     .strict(),
 });
+
+export const loginValidation = z.object({
+  body: z
+    .object({
+      identifier: z
+        .string()
+        .trim()
+        .min(1, { message: "Username or email is required" }),
+      password: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters" }),
+      rememberMe: z.union([z.literal(true), z.literal("true")]).optional(),
+    })
+    .strict(),
+});

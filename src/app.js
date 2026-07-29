@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import mongoSanitize from "mongo-sanitize";
 import pinoHttp from "pino-http";
 import pino from "pino";
+import cookieParser from "cookie-parser";
 
 import "./config/env.js";
 import { env } from "./config/env.js";
@@ -53,6 +54,9 @@ app.use(generalLimiter);
 // Body parsing with size limits to prevent payload attacks
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+
+// Cookie parser for JWT token handling
+app.use(cookieParser());
 
 // NoSQL injection protection for request body
 app.use((req, res, next) => {

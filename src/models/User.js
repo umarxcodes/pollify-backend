@@ -59,6 +59,28 @@ const userSchema = new Schema(
       default: false,
       index: true, // Frequent filter for auth checks
     },
+    loginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lockedUntil: {
+      type: Date,
+      default: null,
+    },
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+    loginActivity: {
+      type: [
+        {
+          timestamp: Date,
+          ipAddress: String,
+          userAgent: String,
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,

@@ -1,4 +1,5 @@
 import { authService } from "./auth.service.js";
+import { setAuthCookies } from "../../utils/cookie.util.js";
 
 // Thin HTTP layer: delegates all business logic to AuthService
 class AuthController {
@@ -24,6 +25,27 @@ class AuthController {
     try {
       const result = await authService.resendVerificationEmail(req.body.email);
       res.status(202).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async login(req, res, next) {
+    try {
+      const { identifier, password, rememberMe } = req.body;
+      const result = await authService.login({
+        identifier,
+        password,
+        rememberMe,
+        ipAddress: req.ip,
+        userAgent: req.get("user-agent"),
+      });
+
+      if (result.data?.accessToken && result.data?.refreshToken) {
+        setAuthCookies(res, result.data.accessToken, result.data.refreshToken);
+      }
+
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

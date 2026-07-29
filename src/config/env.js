@@ -20,6 +20,17 @@ export const env = Object.freeze({
   otpSaltRounds: integer(process.env.OTP_SALT_ROUNDS, 10),
   otpExpiryMinutes: integer(process.env.OTP_EXPIRY_IN_MINUTES, 10),
   otpMaxAttempts: integer(process.env.OTP_MAX_ATTEMPTS, 5),
+  jwt: {
+    accessSecret: process.env.JWT_ACCESS_SECRET || "access_secret",
+    refreshSecret: process.env.JWT_REFRESH_SECRET || "refresh_secret",
+    accessExpiry: process.env.JWT_ACCESS_EXPIRY || "15m",
+    refreshExpiry: process.env.JWT_REFRESH_EXPIRY || "7d",
+    refreshExpiryMs: 7 * 24 * 60 * 60 * 1000,
+  },
+  login: {
+    maxAttempts: integer(process.env.LOGIN_MAX_ATTEMPTS, 5),
+    lockMinutes: integer(process.env.LOGIN_LOCK_MINUTES, 15),
+  },
   smtp: {
     host: process.env.SMTP_HOST,
     port: integer(process.env.SMTP_PORT, 587),
