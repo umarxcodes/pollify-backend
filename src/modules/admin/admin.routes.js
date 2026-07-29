@@ -16,8 +16,6 @@ import {
   commentActionValidation,
   categoriesValidation,
   categoryIdValidation,
-  getReportsValidation,
-  reportActionValidation,
   createNotificationValidation,
   getAuditLogsValidation,
   updateSettingsValidation,
@@ -203,24 +201,6 @@ router.patch(
   adminLimiter,
   validate(categoryIdValidation),
   AdminController.restoreCategory
-);
-
-// Reports
-router.get(
-  "/reports",
-  authenticate,
-  authorize("admin", "super_admin"),
-  adminLimiter,
-  validate(getReportsValidation),
-  AdminController.getReports
-);
-router.patch(
-  "/reports/:id",
-  authenticate,
-  authorize("admin", "super_admin"),
-  adminLimiter,
-  validate(reportActionValidation),
-  AdminController.updateReportStatus
 );
 
 // Notifications

@@ -12,6 +12,7 @@ const reportSchema = new Schema(
       type: String,
       enum: ["poll", "comment", "user"],
       required: true,
+      index: true,
     },
     targetId: {
       type: Schema.Types.ObjectId,
@@ -23,10 +24,13 @@ const reportSchema = new Schema(
       enum: [
         "spam",
         "harassment",
-        "abuse",
         "hate_speech",
+        "misinformation",
+        "inappropriate_content",
+        "copyright",
+        "fake_account",
+        "scam",
         "other",
-        "inappropriate",
       ],
       required: [true, "Report reason is required"],
     },
@@ -38,7 +42,7 @@ const reportSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "reviewed", "resolved", "dismissed"],
+      enum: ["pending", "under_review", "resolved", "rejected"],
       default: "pending",
       index: true,
     },
@@ -57,6 +61,19 @@ const reportSchema = new Schema(
       maxlength: [500, "Admin notes must be at most 500 characters"],
       default: "",
     },
+    moderationAction: {
+      type: String,
+      enum: [
+        "no_action",
+        "delete_poll",
+        "delete_comment",
+        "suspend_user",
+        "warn_user",
+        "ban_user",
+        "restore_content",
+      ],
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -66,5 +83,9 @@ const reportSchema = new Schema(
 
 reportSchema.index({ targetType: 1, targetId: 1 });
 reportSchema.index({ status: 1, createdAt: -1 });
+reportSchema.index(
+  { reporterId: 1, targetType: 1, targetId: 1 },
+  { unique: true }
+);
 
 export default mongoose.models.Report || mongoose.model("Report", reportSchema);

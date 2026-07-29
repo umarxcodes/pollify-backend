@@ -268,34 +268,6 @@ class AdminRepository {
     );
   }
 
-  // Reports
-  async getReports(filters = {}, page = 1, limit = 20) {
-    const skip = (page - 1) * limit;
-    let query = {};
-
-    if (filters.status) query.status = filters.status;
-    if (filters.targetType) query.targetType = filters.targetType;
-
-    const reports = await Report.find(query)
-      .populate("reporterId", "name username")
-      .populate("reviewedBy", "name username")
-      .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: -1 });
-
-    const total = await Report.countDocuments(query);
-
-    return { reports, total };
-  }
-
-  async updateReportStatus(reportId, status, adminId, adminNotes = "") {
-    return await Report.findByIdAndUpdate(
-      reportId,
-      { status, reviewedBy: adminId, reviewedAt: new Date(), adminNotes },
-      { new: true }
-    );
-  }
-
   // Analytics
   async getAnalytics() {
     const now = new Date();

@@ -235,33 +235,6 @@ class AdminController {
     }
   }
 
-  static async getReports(req, res, next) {
-    try {
-      const result = await adminService.getReports(
-        req.query,
-        parseInt(req.query.page) || 1,
-        parseInt(req.query.limit) || 20
-      );
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async updateReportStatus(req, res, next) {
-    try {
-      const result = await adminService.updateReportStatus(
-        req.user.id,
-        req.params.id,
-        req.body.status,
-        req.body.adminNotes || ""
-      );
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async createNotification(req, res, next) {
     try {
       const result = await adminService.createNotification(

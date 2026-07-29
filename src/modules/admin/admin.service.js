@@ -318,39 +318,6 @@ class AdminService {
     );
   }
 
-  // Reports
-  async getReports(filters = {}, page = 1, limit = 20) {
-    const result = await adminRepository.getReports(filters, page, limit);
-    return Response.success(
-      200,
-      {
-        reports: result.reports,
-        pagination: { page, limit, total: result.total },
-      },
-      "Reports fetched successfully"
-    );
-  }
-
-  async updateReportStatus(adminId, reportId, status, adminNotes = "") {
-    const report = await adminRepository.updateReportStatus(
-      reportId,
-      status,
-      adminId,
-      adminNotes
-    );
-    if (!report) throw new ApiError(404, "Report not found");
-
-    await adminRepository.createAuditLog({
-      adminId,
-      action: "update_report_status",
-      targetType: "report",
-      targetId: reportId,
-      details: { status, reason: report.reason },
-    });
-
-    return Response.success(200, { report }, "Report updated successfully");
-  }
-
   // Notifications
   async createNotification(adminId, data) {
     const notification = await adminRepository.createSystemNotification({
