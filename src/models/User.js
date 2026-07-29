@@ -135,6 +135,9 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, env.bcryptSaltRounds);
 });
 
+// Text index for user search
+userSchema.index({ username: "text", name: "text" });
+
 // Instance method to compare candidate password with stored hash
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);

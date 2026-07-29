@@ -86,6 +86,11 @@ const pollSchema = new Schema(
       type: Number,
       default: 0,
     },
+    tags: {
+      type: [String],
+      default: [],
+      index: true,
+    },
   },
   {
     timestamps: true,
@@ -95,5 +100,11 @@ const pollSchema = new Schema(
 
 pollSchema.index({ createdBy: 1, status: 1 });
 pollSchema.index({ status: 1, expiresAt: 1 });
+pollSchema.index({
+  title: "text",
+  description: "text",
+  category: "text",
+  tags: "text",
+});
 
 export default mongoose.models.Poll || mongoose.model("Poll", pollSchema);
