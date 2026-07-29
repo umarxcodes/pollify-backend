@@ -2,26 +2,30 @@ name: CD
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows:
+      - CI
     types:
       - completed
 
 permissions:
   contents: read
 
+concurrency:
+  group: cd-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
-    if: >-
-      ${{ github.event.workflow_run.conclusion == 'success' &&
-        (github.event.workflow_run.head_branch == 'development' ||
-          github.event.workflow_run.head_branch == 'main') }}
+
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      (github.event.workflow_run.head_branch == 'main' ||
+       github.event.workflow_run.head_branch == 'development')
 
     environment:
       name: ${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }}
-      url: ${{ steps.deploy.outputs['url'] }}
-      # Vercel auto-injects: VERCEL_URL, VERCEL_PROJECT_URL, etc.
 
     steps:
       - name: Checkout Repository
@@ -32,24 +36,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
           cache: yarn
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment
-        id: vercel_env
         run: |
-          vercel pull --yes --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }}
+          vercel pull \
+            --yes \
+            --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Build on Vercel
-        id: build
+      - name: Build Project
         run: |
-          vercel build --yes --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }}
+          vercel build \
+            --yes \
+            --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -57,10 +68,20 @@ jobs:
       - name: Deploy to Vercel
         id: deploy
         run: |
-          vercel deploy --prebuilt --yes --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }}
+          URL=$(vercel deploy \
+            --prebuilt \
+            --yes \
+            --environment=${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Output Deployment URL
-        run: echo "Deployed to: ${{ steps.deploy.outputs['url'] }}"
+      - name: Deployment Summary
+        run: |
+          echo "🚀 Deployment Successful!"
+          echo "Environment: ${{ github.event.workflow_run.head_branch == 'main' && 'Production' || 'Preview' }}"
+          echo "URL: ${{ steps.deploy.outputs.url }}"
