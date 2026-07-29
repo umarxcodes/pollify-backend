@@ -76,8 +76,13 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "moderator"],
+      enum: ["user", "admin", "moderator", "super_admin"],
       default: "user",
+    },
+    isSuspended: {
+      type: Boolean,
+      default: false,
+      index: true,
     },
     isVerified: {
       type: Boolean,
