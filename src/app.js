@@ -12,6 +12,7 @@ import { env } from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import voteRoutes from "./modules/vote/vote.routes.js";
+import analyticsRoutes from "./modules/analytics/analytics.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 
 const logger = pino({
@@ -87,6 +88,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/votes", voteRoutes);
+app.use("/api/v1/analytics", analyticsRoutes);
 
 // Multer file upload error handler
 app.use((error, req, res, next) => {
