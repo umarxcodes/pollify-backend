@@ -45,19 +45,19 @@ router.get(
 );
 
 router.get(
-  "/:reportId",
-  authenticate,
-  validate(getReportByIdValidation),
-  ReportController.getReportById
-);
-
-router.get(
   "/analytics",
   authenticate,
   authorize("admin", "super_admin"),
   reportLimiter,
   validate(reportAnalyticsValidation),
   ReportController.getReportAnalytics
+);
+
+router.get(
+  "/:reportId",
+  authenticate,
+  validate(getReportByIdValidation),
+  ReportController.getReportById
 );
 
 router.patch(

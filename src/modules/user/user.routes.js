@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { authenticate } from "../../middlewares/authenticate.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";
+import { upload } from "../../middlewares/upload.js";
 import {
-  getProfileValidation,
   updateProfileValidation,
   uploadProfileImageValidation,
   deleteAccountValidation,
@@ -23,6 +23,7 @@ router.patch(
 router.post(
   "/profile-image",
   authenticate,
+  upload.single("profileImage"),
   validate(uploadProfileImageValidation),
   userController.uploadProfileImage
 );

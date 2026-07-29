@@ -20,7 +20,11 @@ import searchRoutes from "./modules/search/search.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import reportRoutes from "./modules/report/report.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
-import { verifyCsrfToken } from "./middlewares/csrf.middleware.js";
+import {
+  generateCsrfToken,
+  setCsrfCookie,
+  verifyCsrfToken,
+} from "./middlewares/csrf.middleware.js";
 
 const logger = pino({
   level: process.env.NODE_ENV === "production" ? "info" : "debug",
@@ -83,6 +87,12 @@ app.get("/health", (req, res) => {
     message: "Pollify API is healthy",
     timestamp: new Date().toISOString(),
   });
+});
+
+app.get("/api/v1/csrf-token", (req, res) => {
+  const token = generateCsrfToken();
+  setCsrfCookie(res, token);
+  res.status(200).json({ success: true, data: { csrfToken: token } });
 });
 
 // Root endpoint

@@ -13,6 +13,7 @@ import {
   updateProfileValidation,
 } from "./auth.validation.js";
 import { authenticate } from "../../middlewares/authenticate.middleware.js";
+import { upload } from "../../middlewares/upload.js";
 
 const router = Router();
 
@@ -38,29 +39,6 @@ const loginRateLimiter = expressRateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-});
-
-const multer = (await import("multer")).default;
-const storage = multer.memoryStorage();
-
-// Accept jpg, jpeg, png, webp only; enforce 2MB limit
-const fileFilter = (req, file, cb) => {
-  if (!file) return cb(null, true);
-
-  const acceptedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-  if (acceptedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Invalid profile image type"), false);
-  }
-};
-
-const upload = multer({
-  storage,
-  limits: {
-    fileSize: 2 * 1024 * 1024,
-  },
-  fileFilter,
 });
 
 router.post(

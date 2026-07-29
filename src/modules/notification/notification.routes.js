@@ -51,6 +51,14 @@ router.patch(
   NotificationController.updatePreferences
 );
 
+router.patch(
+  "/read-all",
+  authenticate,
+  notificationLimiter,
+  validate(markAllAsReadValidation),
+  NotificationController.markAllAsRead
+);
+
 router.get(
   "/:notificationId",
   authenticate,
@@ -73,14 +81,6 @@ router.delete(
   validate(deleteNotificationValidation),
   checkNotificationOwnership,
   NotificationController.deleteNotification
-);
-
-router.patch(
-  "/read-all",
-  authenticate,
-  notificationLimiter,
-  validate(markAllAsReadValidation),
-  NotificationController.markAllAsRead
 );
 
 router.delete(
