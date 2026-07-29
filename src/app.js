@@ -20,6 +20,7 @@ import searchRoutes from "./modules/search/search.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import reportRoutes from "./modules/report/report.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
+import { verifyCsrfToken } from "./middlewares/csrf.middleware.js";
 
 const logger = pino({
   level: process.env.NODE_ENV === "production" ? "info" : "debug",
@@ -94,15 +95,15 @@ app.get("/", (req, res) => {
 
 // Feature routes
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/votes", voteRoutes);
-app.use("/api/v1/analytics", analyticsRoutes);
-app.use("/api/v1/comments", commentRoutes);
-app.use("/api/v1/bookmarks", bookmarkRoutes);
-app.use("/api/v1/notifications", notificationRoutes);
+app.use("/api/v1/users", verifyCsrfToken, userRoutes);
+app.use("/api/v1/votes", verifyCsrfToken, voteRoutes);
+app.use("/api/v1/analytics", verifyCsrfToken, analyticsRoutes);
+app.use("/api/v1/comments", verifyCsrfToken, commentRoutes);
+app.use("/api/v1/bookmarks", verifyCsrfToken, bookmarkRoutes);
+app.use("/api/v1/notifications", verifyCsrfToken, notificationRoutes);
 app.use("/api/v1/search", searchRoutes);
-app.use("/api/v1/reports", reportRoutes);
-app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/reports", verifyCsrfToken, reportRoutes);
+app.use("/api/v1/admin", verifyCsrfToken, adminRoutes);
 
 // Multer file upload error handler
 app.use((error, req, res, next) => {

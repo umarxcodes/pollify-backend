@@ -1,13 +1,18 @@
 import { authService } from "./auth.service.js";
-import { setAuthCookies } from "../../utils/cookie.util.js";
-import { clearAuthCookies } from "../../utils/cookie.util.js";
+import { setAuthCookies, clearAuthCookies } from "../../utils/cookie.util.js";
 import { Response } from "../../utils/response.js";
+import {
+  generateCsrfToken,
+  setCsrfCookie,
+} from "../../middlewares/csrf.middleware.js";
 
 // Thin HTTP layer: delegates all business logic to AuthService
 class AuthController {
   static async register(req, res, next) {
     try {
       const result = await authService.register(req.body, req.file);
+      const csrfToken = generateCsrfToken();
+      setCsrfCookie(res, csrfToken);
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -45,6 +50,8 @@ class AuthController {
 
       if (result.data?.accessToken && result.data?.refreshToken) {
         setAuthCookies(res, result.data.accessToken, result.data.refreshToken);
+        const csrfToken = generateCsrfToken();
+        setCsrfCookie(res, csrfToken);
       }
 
       const safeData = { ...result.data };
