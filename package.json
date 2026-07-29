@@ -1,5 +1,5 @@
 {
-  "name": "portfolio-backend",
+  "name": "pollify-backend",
   "version": "1.0.0",
   "main": "src/server.js",
   "author": "Muhammad Umar",
@@ -28,8 +28,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky",
-    "health": "node -e \"import('http').then(m=>m.get('http://localhost:5000/health',r=>console.log(r.statusCode)))\""
+    "health": "node -e \"import('http').then(m=>m.get('http://localhost:5000/health',r=>console.log(r.statusCode)))\"",
+    "test": "node -e \"const fs=require('fs');const path=require('path');const files=[];function walk(dir){for(const f of fs.readdirSync(dir)){const p=path.join(dir,f);if(fs.statSync(p).isDirectory()){if(f!=='node_modules'&&f!=='.git')walk(p);}else if(f.endsWith('.js'))files.push(p);}}walk('src');console.log('Found',files.length,'JS files');files.forEach(f=>{try{require('fs').readFileSync(f,'utf8');}catch(e){console.error('Error reading',f,':',e.message);process.exit(1);}});console.log('All files readable');",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,json}": [

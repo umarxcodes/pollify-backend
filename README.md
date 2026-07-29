@@ -293,155 +293,155 @@ GET /health
 
 ### Authentication
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/auth/register` | No | Register new user |
-| POST | `/auth/verify-email` | No | Verify email with OTP |
-| POST | `/auth/resend-verification` | No | Resend verification OTP |
-| POST | `/auth/login` | No | Login with username/email + password |
-| POST | `/auth/refresh-token` | No | Refresh access token |
-| POST | `/auth/logout` | No | Logout and revoke refresh token |
-| POST | `/auth/forgot-password` | No | Request password reset |
-| POST | `/auth/reset-password` | No | Reset password with token |
-| PATCH | `/auth/change-password` | Yes | Change password (logged in) |
-| GET | `/auth/me` | Yes | Get current user profile |
-| PATCH | `/auth/profile` | Yes | Update profile |
+| Method | Endpoint                    | Auth | Description                          |
+| ------ | --------------------------- | ---- | ------------------------------------ |
+| POST   | `/auth/register`            | No   | Register new user                    |
+| POST   | `/auth/verify-email`        | No   | Verify email with OTP                |
+| POST   | `/auth/resend-verification` | No   | Resend verification OTP              |
+| POST   | `/auth/login`               | No   | Login with username/email + password |
+| POST   | `/auth/refresh-token`       | No   | Refresh access token                 |
+| POST   | `/auth/logout`              | No   | Logout and revoke refresh token      |
+| POST   | `/auth/forgot-password`     | No   | Request password reset               |
+| POST   | `/auth/reset-password`      | No   | Reset password with token            |
+| PATCH  | `/auth/change-password`     | Yes  | Change password (logged in)          |
+| GET    | `/auth/me`                  | Yes  | Get current user profile             |
+| PATCH  | `/auth/profile`             | Yes  | Update profile                       |
 
 ### Users
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/users/me` | Yes | Get own profile |
-| GET | `/users/:username` | No | Get public profile |
-| PATCH | `/users/profile` | Yes | Update profile |
-| POST | `/users/profile-image` | Yes | Upload profile image |
-| DELETE | `/users/profile-image` | Yes | Delete profile image |
-| DELETE | `/users` | Yes | Delete account |
-| GET | `/users/stats` | Yes | Get account statistics |
+| Method | Endpoint               | Auth | Description            |
+| ------ | ---------------------- | ---- | ---------------------- |
+| GET    | `/users/me`            | Yes  | Get own profile        |
+| GET    | `/users/:username`     | No   | Get public profile     |
+| PATCH  | `/users/profile`       | Yes  | Update profile         |
+| POST   | `/users/profile-image` | Yes  | Upload profile image   |
+| DELETE | `/users/profile-image` | Yes  | Delete profile image   |
+| DELETE | `/users`               | Yes  | Delete account         |
+| GET    | `/users/stats`         | Yes  | Get account statistics |
 
 ### Votes
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/votes/polls/:pollId/vote` | Yes | Cast vote |
-| PATCH | `/votes/polls/:pollId/vote` | Yes | Change vote |
-| DELETE | `/votes/polls/:pollId/vote` | Yes | Remove vote |
-| GET | `/votes/polls/:pollId/my-vote` | Yes | Get my vote |
-| GET | `/votes/polls/:pollId/voters` | No | Get voters |
-| GET | `/votes/polls/:pollId/results` | No | Get poll results |
-| GET | `/votes/polls/:pollId/stats` | Yes | Get poll statistics |
-| GET | `/votes/me/votes` | Yes | Get user vote history |
+| Method | Endpoint                       | Auth | Description           |
+| ------ | ------------------------------ | ---- | --------------------- |
+| POST   | `/votes/polls/:pollId/vote`    | Yes  | Cast vote             |
+| PATCH  | `/votes/polls/:pollId/vote`    | Yes  | Change vote           |
+| DELETE | `/votes/polls/:pollId/vote`    | Yes  | Remove vote           |
+| GET    | `/votes/polls/:pollId/my-vote` | Yes  | Get my vote           |
+| GET    | `/votes/polls/:pollId/voters`  | No   | Get voters            |
+| GET    | `/votes/polls/:pollId/results` | No   | Get poll results      |
+| GET    | `/votes/polls/:pollId/stats`   | Yes  | Get poll statistics   |
+| GET    | `/votes/me/votes`              | Yes  | Get user vote history |
 
 ### Poll Analytics
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/analytics/polls/:pollId` | Yes | Complete poll analytics |
-| GET | `/analytics/polls/:pollId/results` | No | Poll results with percentages |
-| GET | `/analytics/polls/:pollId/chart` | No | Chart-ready data |
-| GET | `/analytics/dashboard` | Yes | Owner dashboard analytics |
-| GET | `/analytics/trending` | No | Trending polls |
+| Method | Endpoint                           | Auth | Description                   |
+| ------ | ---------------------------------- | ---- | ----------------------------- |
+| GET    | `/analytics/polls/:pollId`         | Yes  | Complete poll analytics       |
+| GET    | `/analytics/polls/:pollId/results` | No   | Poll results with percentages |
+| GET    | `/analytics/polls/:pollId/chart`   | No   | Chart-ready data              |
+| GET    | `/analytics/dashboard`             | Yes  | Owner dashboard analytics     |
+| GET    | `/analytics/trending`              | No   | Trending polls                |
 
 ### Comments
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/comments/polls/:pollId/comments` | Yes | Add comment |
-| GET | `/comments/polls/:pollId/comments` | No | Get comments |
-| PATCH | `/comments/:commentId` | Yes | Edit comment |
-| DELETE | `/comments/:commentId` | Yes | Delete comment |
-| POST | `/comments/:commentId/replies` | Yes | Reply to comment |
-| POST | `/comments/:commentId/like` | Yes | Like comment |
-| DELETE | `/comments/:commentId/like` | Yes | Unlike comment |
-| PATCH | `/comments/:commentId/pin` | Yes | Pin comment |
-| DELETE | `/comments/:commentId/pin` | Yes | Unpin comment |
-| POST | `/comments/:commentId/report` | Yes | Report comment |
-| GET | `/comments/polls/:pollId/analytics` | Yes | Comment analytics |
+| Method | Endpoint                            | Auth | Description       |
+| ------ | ----------------------------------- | ---- | ----------------- |
+| POST   | `/comments/polls/:pollId/comments`  | Yes  | Add comment       |
+| GET    | `/comments/polls/:pollId/comments`  | No   | Get comments      |
+| PATCH  | `/comments/:commentId`              | Yes  | Edit comment      |
+| DELETE | `/comments/:commentId`              | Yes  | Delete comment    |
+| POST   | `/comments/:commentId/replies`      | Yes  | Reply to comment  |
+| POST   | `/comments/:commentId/like`         | Yes  | Like comment      |
+| DELETE | `/comments/:commentId/like`         | Yes  | Unlike comment    |
+| PATCH  | `/comments/:commentId/pin`          | Yes  | Pin comment       |
+| DELETE | `/comments/:commentId/pin`          | Yes  | Unpin comment     |
+| POST   | `/comments/:commentId/report`       | Yes  | Report comment    |
+| GET    | `/comments/polls/:pollId/analytics` | Yes  | Comment analytics |
 
 ### Bookmarks
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/bookmarks/:pollId` | Yes | Save poll |
-| DELETE | `/bookmarks/:pollId` | Yes | Remove bookmark |
-| GET | `/bookmarks/:pollId/status` | No | Check save status |
-| GET | `/bookmarks` | Yes | Get my bookmarks |
-| GET | `/bookmarks/stats` | Yes | Bookmark statistics |
+| Method | Endpoint                    | Auth | Description         |
+| ------ | --------------------------- | ---- | ------------------- |
+| POST   | `/bookmarks/:pollId`        | Yes  | Save poll           |
+| DELETE | `/bookmarks/:pollId`        | Yes  | Remove bookmark     |
+| GET    | `/bookmarks/:pollId/status` | No   | Check save status   |
+| GET    | `/bookmarks`                | Yes  | Get my bookmarks    |
+| GET    | `/bookmarks/stats`          | Yes  | Bookmark statistics |
 
 ### Notifications
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/notifications` | Yes | List notifications |
-| GET | `/notifications/unread-count` | Yes | Get unread count |
-| GET | `/notifications/:id` | Yes | Get single notification |
-| PATCH | `/notifications/:id/read` | Yes | Mark as read |
-| PATCH | `/notifications/read-all` | Yes | Mark all as read |
-| DELETE | `/notifications/:id` | Yes | Delete notification |
-| DELETE | `/notifications` | Yes | Delete all notifications |
-| GET | `/notifications/preferences` | Yes | Get preferences |
-| PATCH | `/notifications/preferences` | Yes | Update preferences |
+| Method | Endpoint                      | Auth | Description              |
+| ------ | ----------------------------- | ---- | ------------------------ |
+| GET    | `/notifications`              | Yes  | List notifications       |
+| GET    | `/notifications/unread-count` | Yes  | Get unread count         |
+| GET    | `/notifications/:id`          | Yes  | Get single notification  |
+| PATCH  | `/notifications/:id/read`     | Yes  | Mark as read             |
+| PATCH  | `/notifications/read-all`     | Yes  | Mark all as read         |
+| DELETE | `/notifications/:id`          | Yes  | Delete notification      |
+| DELETE | `/notifications`              | Yes  | Delete all notifications |
+| GET    | `/notifications/preferences`  | Yes  | Get preferences          |
+| PATCH  | `/notifications/preferences`  | Yes  | Update preferences       |
 
 ### Search
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/search` | No | Global search |
-| GET | `/search/polls` | No | Search polls |
-| GET | `/search/users` | No | Search users |
-| GET | `/search/categories` | No | Search categories |
-| GET | `/search/trending` | No | Trending polls |
-| GET | `/search/popular` | No | Popular polls |
-| GET | `/search/latest` | No | Latest polls |
-| GET | `/search/ending-soon` | No | Polls ending within 24h |
-| GET | `/search/recommended` | Yes | Recommended polls |
-| GET | `/search/recent` | Yes | Recently viewed polls |
-| POST | `/search/recent/:pollId` | Yes | Track poll view |
-| GET | `/search/history` | Yes | Search history |
-| DELETE | `/search/history` | Yes | Delete all history |
-| DELETE | `/search/history/:id` | Yes | Delete one history item |
-| GET | `/search/suggestions` | No | Search suggestions |
+| Method | Endpoint                 | Auth | Description             |
+| ------ | ------------------------ | ---- | ----------------------- |
+| GET    | `/search`                | No   | Global search           |
+| GET    | `/search/polls`          | No   | Search polls            |
+| GET    | `/search/users`          | No   | Search users            |
+| GET    | `/search/categories`     | No   | Search categories       |
+| GET    | `/search/trending`       | No   | Trending polls          |
+| GET    | `/search/popular`        | No   | Popular polls           |
+| GET    | `/search/latest`         | No   | Latest polls            |
+| GET    | `/search/ending-soon`    | No   | Polls ending within 24h |
+| GET    | `/search/recommended`    | Yes  | Recommended polls       |
+| GET    | `/search/recent`         | Yes  | Recently viewed polls   |
+| POST   | `/search/recent/:pollId` | Yes  | Track poll view         |
+| GET    | `/search/history`        | Yes  | Search history          |
+| DELETE | `/search/history`        | Yes  | Delete all history      |
+| DELETE | `/search/history/:id`    | Yes  | Delete one history item |
+| GET    | `/search/suggestions`    | No   | Search suggestions      |
 
 ### Reports
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/reports` | Yes | Create report |
-| GET | `/reports/my` | Yes | Get my reports |
-| GET | `/reports/:reportId` | Yes | Get report details |
-| GET | `/reports/analytics` | Admin | Report analytics |
-| PATCH | `/reports/:id/review` | Admin | Mark under review |
-| PATCH | `/reports/:id/resolve` | Admin | Resolve with action |
-| PATCH | `/reports/:id/reject` | Admin | Reject report |
+| Method | Endpoint               | Auth  | Description         |
+| ------ | ---------------------- | ----- | ------------------- |
+| POST   | `/reports`             | Yes   | Create report       |
+| GET    | `/reports/my`          | Yes   | Get my reports      |
+| GET    | `/reports/:reportId`   | Yes   | Get report details  |
+| GET    | `/reports/analytics`   | Admin | Report analytics    |
+| PATCH  | `/reports/:id/review`  | Admin | Mark under review   |
+| PATCH  | `/reports/:id/resolve` | Admin | Resolve with action |
+| PATCH  | `/reports/:id/reject`  | Admin | Reject report       |
 
 ### Admin
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/admin/dashboard` | Admin | Dashboard statistics |
-| GET | `/admin/users` | Admin | User management |
-| PATCH | `/admin/users/:id/role` | Super Admin | Update user role |
-| PATCH | `/admin/users/:id/suspend` | Admin | Suspend user |
-| PATCH | `/admin/users/:id/unsuspend` | Admin | Unsuspend user |
-| DELETE | `/admin/users/:id` | Super Admin | Delete user |
-| GET | `/admin/polls` | Admin | Poll management |
-| DELETE | `/admin/polls/:pollId` | Admin | Delete poll |
-| PATCH | `/admin/polls/:pollId/restore` | Admin | Restore poll |
-| PATCH | `/admin/polls/:pollId/feature` | Super Admin | Feature poll |
-| PATCH | `/admin/polls/:pollId/close` | Admin | Close poll |
-| GET | `/admin/comments` | Admin | Comment management |
-| DELETE | `/admin/comments/:id` | Admin | Delete comment |
-| PATCH | `/admin/comments/:id/restore` | Admin | Restore comment |
-| GET | `/admin/categories` | Admin | Category management |
-| POST | `/admin/categories` | Super Admin | Create category |
-| PATCH | `/admin/categories/:id` | Super Admin | Update category |
-| DELETE | `/admin/categories/:id` | Super Admin | Delete category |
-| PATCH | `/admin/categories/:id/restore` | Super Admin | Restore category |
-| POST | `/admin/notifications` | Super Admin | Create notification |
-| POST | `/admin/notifications/broadcast` | Super Admin | Broadcast notification |
-| GET | `/admin/audit-logs` | Super Admin | Audit trail |
-| GET | `/admin/analytics` | Admin | Admin analytics |
-| PATCH | `/admin/settings` | Super Admin | System settings |
+| Method | Endpoint                         | Auth        | Description            |
+| ------ | -------------------------------- | ----------- | ---------------------- |
+| GET    | `/admin/dashboard`               | Admin       | Dashboard statistics   |
+| GET    | `/admin/users`                   | Admin       | User management        |
+| PATCH  | `/admin/users/:id/role`          | Super Admin | Update user role       |
+| PATCH  | `/admin/users/:id/suspend`       | Admin       | Suspend user           |
+| PATCH  | `/admin/users/:id/unsuspend`     | Admin       | Unsuspend user         |
+| DELETE | `/admin/users/:id`               | Super Admin | Delete user            |
+| GET    | `/admin/polls`                   | Admin       | Poll management        |
+| DELETE | `/admin/polls/:pollId`           | Admin       | Delete poll            |
+| PATCH  | `/admin/polls/:pollId/restore`   | Admin       | Restore poll           |
+| PATCH  | `/admin/polls/:pollId/feature`   | Super Admin | Feature poll           |
+| PATCH  | `/admin/polls/:pollId/close`     | Admin       | Close poll             |
+| GET    | `/admin/comments`                | Admin       | Comment management     |
+| DELETE | `/admin/comments/:id`            | Admin       | Delete comment         |
+| PATCH  | `/admin/comments/:id/restore`    | Admin       | Restore comment        |
+| GET    | `/admin/categories`              | Admin       | Category management    |
+| POST   | `/admin/categories`              | Super Admin | Create category        |
+| PATCH  | `/admin/categories/:id`          | Super Admin | Update category        |
+| DELETE | `/admin/categories/:id`          | Super Admin | Delete category        |
+| PATCH  | `/admin/categories/:id/restore`  | Super Admin | Restore category       |
+| POST   | `/admin/notifications`           | Super Admin | Create notification    |
+| POST   | `/admin/notifications/broadcast` | Super Admin | Broadcast notification |
+| GET    | `/admin/audit-logs`              | Super Admin | Audit trail            |
+| GET    | `/admin/analytics`               | Admin       | Admin analytics        |
+| PATCH  | `/admin/settings`                | Super Admin | System settings        |
 
 ---
 
@@ -532,8 +532,18 @@ GET /health
 
 ```javascript
 {
-  _id, recipientId, senderId, type, title, message,
-  entityType, entityId, isRead, readAt, metadata, timestamps
+  (_id,
+    recipientId,
+    senderId,
+    type,
+    title,
+    message,
+    entityType,
+    entityId,
+    isRead,
+    readAt,
+    metadata,
+    timestamps);
 }
 ```
 
@@ -541,8 +551,18 @@ GET /health
 
 ```javascript
 {
-  _id, reporterId, targetType, targetId, reason, description,
-  status, reviewedBy, reviewedAt, adminNotes, moderationAction, timestamps
+  (_id,
+    reporterId,
+    targetType,
+    targetId,
+    reason,
+    description,
+    status,
+    reviewedBy,
+    reviewedAt,
+    adminNotes,
+    moderationAction,
+    timestamps);
 }
 ```
 
@@ -550,7 +570,7 @@ GET /health
 
 ```javascript
 {
-  _id, userId, pollId, timestamps
+  (_id, userId, pollId, timestamps);
 }
 ```
 
@@ -558,7 +578,7 @@ GET /health
 
 ```javascript
 {
-  _id, name, description, slug, isActive, pollCount, timestamps
+  (_id, name, description, slug, isActive, pollCount, timestamps);
 }
 ```
 
@@ -566,8 +586,15 @@ GET /health
 
 ```javascript
 {
-  _id, adminId, action, targetType, targetId, details,
-  ipAddress, userAgent, timestamps
+  (_id,
+    adminId,
+    action,
+    targetType,
+    targetId,
+    details,
+    ipAddress,
+    userAgent,
+    timestamps);
 }
 ```
 
@@ -575,32 +602,32 @@ GET /health
 
 ## Rate Limits
 
-| Endpoint Category | Limit | Window |
-| ------------------ | ----- | ------ |
-| Global API | 100 requests | 15 minutes |
-| Auth endpoints | 5-10 requests | 15 minutes |
+| Endpoint Category       | Limit          | Window     |
+| ----------------------- | -------------- | ---------- |
+| Global API              | 100 requests   | 15 minutes |
+| Auth endpoints          | 5-10 requests  | 15 minutes |
 | Comment/Report creation | 20-30 requests | 15 minutes |
-| Admin endpoints | 200 requests | 15 minutes |
-| Search endpoints | 100 requests | 15 minutes |
+| Admin endpoints         | 200 requests   | 15 minutes |
+| Search endpoints        | 100 requests   | 15 minutes |
 
 ---
 
 ## Error Codes
 
-| Status Code | Meaning |
-| ----------- | -------- |
-| 200 | Success |
-| 201 | Created |
-| 202 | Accepted |
-| 400 | Validation Error |
-| 401 | Unauthorized |
-| 403 | Forbidden |
-| 404 | Not Found |
-| 409 | Conflict (duplicate) |
-| 413 | Payload Too Large |
-| 423 | Locked |
-| 429 | Too Many Requests |
-| 500 | Internal Server Error |
+| Status Code | Meaning               |
+| ----------- | --------------------- |
+| 200         | Success               |
+| 201         | Created               |
+| 202         | Accepted              |
+| 400         | Validation Error      |
+| 401         | Unauthorized          |
+| 403         | Forbidden             |
+| 404         | Not Found             |
+| 409         | Conflict (duplicate)  |
+| 413         | Payload Too Large     |
+| 423         | Locked                |
+| 429         | Too Many Requests     |
+| 500         | Internal Server Error |
 
 ---
 
