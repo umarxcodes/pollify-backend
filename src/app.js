@@ -14,6 +14,7 @@ import userRoutes from "./modules/user/user.routes.js";
 import voteRoutes from "./modules/vote/vote.routes.js";
 import analyticsRoutes from "./modules/analytics/analytics.routes.js";
 import commentRoutes from "./modules/comment/comment.routes.js";
+import bookmarkRoutes from "./modules/bookmark/bookmark.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 
 const logger = pino({
@@ -91,6 +92,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/votes", voteRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);
 app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/bookmarks", bookmarkRoutes);
 
 // Multer file upload error handler
 app.use((error, req, res, next) => {

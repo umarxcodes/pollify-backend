@@ -50,6 +50,11 @@ const pollSchema = new Schema(
       enum: ["single", "multiple", "anonymous"],
       default: "single",
     },
+    category: {
+      type: String,
+      trim: true,
+      default: "General",
+    },
     allowVoteChange: {
       type: Boolean,
       default: false,
@@ -76,6 +81,10 @@ const pollSchema = new Schema(
       ref: "User",
       default: [],
       index: true,
+    },
+    savedCount: {
+      type: Number,
+      default: 0,
     },
   },
   {
