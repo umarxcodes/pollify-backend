@@ -76,12 +76,6 @@ const pollSchema = new Schema(
       type: Date,
       default: null,
     },
-    voters: {
-      type: [Schema.Types.ObjectId],
-      ref: "User",
-      default: [],
-      index: true,
-    },
     savedCount: {
       type: Number,
       default: 0,

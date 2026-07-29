@@ -42,13 +42,22 @@ class CommentService {
       );
     }
 
+    const commentIds = comments.map((c) => c._id);
+    const repliesMap =
+      commentIds.length > 0
+        ? await commentRepository.findRepliesByParents(commentIds)
+        : {};
+
+    const likedSet = new Set(
+      likedCommentIds.map((l) => l.commentId.toString())
+    );
+
     const enrichedComments = comments.map((comment) => {
+      const replies = repliesMap[comment._id.toString()] || [];
       return {
         ...comment.toObject(),
-        replies: [],
-        hasLiked: likedCommentIds.some(
-          (like) => like.commentId.toString() === comment._id.toString()
-        ),
+        replies,
+        hasLiked: likedSet.has(comment._id.toString()),
       };
     });
 

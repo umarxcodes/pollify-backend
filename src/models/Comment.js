@@ -49,6 +49,10 @@ const commentSchema = new Schema(
       default: false,
       index: true,
     },
+    originalContent: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
@@ -59,6 +63,12 @@ const commentSchema = new Schema(
 commentSchema.index({ pollId: 1, parentCommentId: 1, createdAt: -1 });
 commentSchema.index({ pollId: 1, isPinned: 1, createdAt: -1 });
 commentSchema.index({ userId: 1, createdAt: -1 });
+commentSchema.index({
+  pollId: 1,
+  parentCommentId: 1,
+  isDeleted: 1,
+  createdAt: -1,
+});
 
 export default mongoose.models.Comment ||
   mongoose.model("Comment", commentSchema);

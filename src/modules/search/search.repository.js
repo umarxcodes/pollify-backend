@@ -253,6 +253,7 @@ class SearchRepository {
   }
 
   async addRecentlyViewed(userId, pollId) {
+    if (!userId) return;
     await RecentlyViewed.findOneAndUpdate(
       { userId, pollId },
       { userId, pollId },
@@ -261,6 +262,7 @@ class SearchRepository {
   }
 
   async addSearchHistory(userId, query, resultsCount) {
+    if (!userId) return;
     await SearchHistory.create({ userId, query, resultsCount });
     await SearchHistory.deleteMany({
       userId,

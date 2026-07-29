@@ -67,9 +67,11 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 // Cookie parser for JWT token handling
 app.use(cookieParser());
 
-// NoSQL injection protection for request body
+// NoSQL injection protection for all request sources
 app.use((req, res, next) => {
   mongoSanitize(req.body);
+  mongoSanitize(req.query);
+  mongoSanitize(req.params);
   next();
 });
 

@@ -48,14 +48,38 @@ class CommentRepository {
       .sort({ createdAt: 1 });
   }
 
+  async findRepliesByParents(parentCommentIds) {
+    const replies = await Comment.find({
+      parentCommentId: { $in: parentCommentIds },
+      isDeleted: false,
+    })
+      .populate("userId", "name username profileImage")
+      .sort({ createdAt: 1 });
+
+    const grouped = {};
+    for (const reply of replies) {
+      const parentId = reply.parentCommentId.toString();
+      if (!grouped[parentId]) grouped[parentId] = [];
+      grouped[parentId].push(reply);
+    }
+    return grouped;
+  }
+
   async updateComment(id, updates) {
     return await Comment.findByIdAndUpdate(id, updates, { new: true });
   }
 
   async softDeleteComment(id) {
+    const comment = await Comment.findById(id);
+    if (!comment) return null;
+    const contentToPreserve = comment.originalContent || comment.content;
     return await Comment.findByIdAndUpdate(
       id,
-      { isDeleted: true, content: "This comment has been deleted." },
+      {
+        isDeleted: true,
+        originalContent: contentToPreserve,
+        content: "This comment has been deleted.",
+      },
       { new: true }
     );
   }

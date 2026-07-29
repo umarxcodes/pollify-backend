@@ -32,10 +32,7 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please provide a valid email",
-      ],
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please provide a valid email"],
       index: true,
     },
     password: {
@@ -114,6 +111,7 @@ const userSchema = new Schema(
         },
       ],
       default: [],
+      maxlength: [50, "Login activity cannot exceed 50 entries"],
     },
     notificationPreferences: {
       type: {

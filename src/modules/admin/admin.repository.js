@@ -214,17 +214,29 @@ class AdminRepository {
   }
 
   async deleteComment(commentId) {
+    const comment = await Comment.findById(commentId);
+    if (!comment) return null;
+    const contentToPreserve = comment.originalContent || comment.content;
     return await Comment.findByIdAndUpdate(
       commentId,
-      { isDeleted: true, content: "This comment has been deleted." },
+      {
+        isDeleted: true,
+        originalContent: contentToPreserve,
+        content: "This comment has been deleted.",
+      },
       { new: true }
     );
   }
 
   async restoreComment(commentId) {
+    const comment = await Comment.findById(commentId);
+    if (!comment) return null;
     return await Comment.findByIdAndUpdate(
       commentId,
-      { isDeleted: false },
+      {
+        isDeleted: false,
+        content: comment.originalContent || comment.content,
+      },
       { new: true }
     );
   }

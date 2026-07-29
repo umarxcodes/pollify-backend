@@ -12,6 +12,7 @@ import {
   passwordResetEmail,
 } from "../../services/mail.templates.js";
 import { verifyRefreshToken } from "../../services/jwt.service.js";
+import { CloudinaryService } from "../../services/cloudinary.service.js";
 
 class AuthService {
   // Register a new user and trigger email verification
@@ -44,10 +45,8 @@ class AuthService {
           "Profile image content must be jpg, png, or webp"
         );
       }
-      const base64 = profileImage.buffer.toString("base64");
-      const mimeType = profileImage.mimetype;
-      const dataUri = `data:${mimeType};base64,${base64}`;
-      userProfileImage = dataUri;
+      const uploaded = await CloudinaryService.uploadImage(profileImage);
+      userProfileImage = uploaded.url;
     }
 
     const user = await authRepository.createUser({
@@ -302,7 +301,8 @@ class AuthService {
           400,
           "Profile image content must be jpg, png, or webp"
         );
-      updates.profileImage = `data:${profileImage.mimetype};base64,${profileImage.buffer.toString("base64")}`;
+      const uploaded = await CloudinaryService.uploadImage(profileImage);
+      updates.profileImage = uploaded.url;
     }
     const user = await authRepository.updateUserProfile(userId, updates);
     return Response.success(
