@@ -112,7 +112,6 @@ class AuthRepository {
       userId,
       {
         $inc: { loginAttempts: 1 },
-        lastFailedLogin: new Date(),
       },
       { new: true }
     );

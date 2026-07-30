@@ -44,7 +44,7 @@ class UserRepository {
             $multiply: [
               {
                 $add: [
-                  { $cond: [{ $gt: [{ $strLenCP: "$fullName" }, 0] }, 10, 0] },
+                  { $cond: [{ $gt: [{ $strLenCP: "$name" }, 0] }, 10, 0] },
                   { $cond: [{ $gt: [{ $strLenCP: "$bio" }, 0] }, 10, 0] },
                   { $cond: [{ $gt: [{ $strLenCP: "$website" }, 0] }, 10, 0] },
                   { $cond: [{ $gt: [{ $strLenCP: "$github" }, 0] }, 10, 0] },

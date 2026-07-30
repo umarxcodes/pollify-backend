@@ -64,17 +64,17 @@ router.post(
 
 router.post(
   "/resend-verification",
+  registerRateLimiter,
   validate(resendVerificationValidation),
   authController.resendVerificationEmail
 );
-
 router.post(
   "/resend-otp",
   registerRateLimiter,
   validate(resendVerificationValidation),
   authController.resendVerificationEmail
 );
-router.post("/refresh-token", authController.refreshToken);
+router.post("/refresh-token", loginRateLimiter, authController.refreshToken);
 router.post("/logout", authenticate, authController.logout);
 router.post(
   "/forgot-password",

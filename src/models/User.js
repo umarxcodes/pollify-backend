@@ -81,6 +81,11 @@ const userSchema = new Schema(
       default: false,
       index: true,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
     isVerified: {
       type: Boolean,
       default: false,

@@ -1,4 +1,5 @@
 import { ApiError } from "../utils/apiError.js";
+import logger from "../utils/logger.js";
 
 // Handle requests to undefined routes
 export const notFound = (req, res, next) => {
@@ -30,6 +31,17 @@ export const errorHandler = (err, req, res, _next) => {
     message = err.message || "Internal Server Error";
     errors = err.errors;
   }
+
+  logger.error(
+    {
+      err,
+      statusCode,
+      message,
+      path: req.originalUrl,
+      method: req.method,
+    },
+    "Unhandled error"
+  );
 
   res.status(statusCode).json({
     success: false,

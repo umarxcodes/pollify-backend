@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "../utils/logger.js";
 
 let isConnected = false;
 
@@ -9,9 +10,9 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     isConnected = true;
-    console.log("MongoDB connected successfully");
+    logger.info("MongoDB connected successfully");
   } catch (error) {
-    console.error("MongoDB connection failed:", error.message);
+    logger.error("MongoDB connection failed:", error);
     // Do not exit the process directly; on serverless platforms like Vercel,
     // the runtime manages restarts. Throwing allows upstream error handling.
     throw error;

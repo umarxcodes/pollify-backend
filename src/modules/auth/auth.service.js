@@ -89,7 +89,7 @@ class AuthService {
         user._id,
         user.email,
         user.name,
-        true
+        false
       );
     return Response.success(
       202,
@@ -123,12 +123,12 @@ class AuthService {
     }
 
     if (user.isSuspended) {
-      throw new ApiError(403, "This account is suspended");
+      throw new ApiError(403, "Account is suspended");
     }
 
     // Check if email is verified
     if (!user.isVerified) {
-      throw new ApiError(403, "Please verify your email before logging in.");
+      throw new ApiError(403, "Invalid username/email or password.");
     }
 
     // Compare password

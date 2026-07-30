@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Bookmark from "../../models/Bookmark.js";
 import Poll from "../../models/Poll.js";
 import User from "../../models/User.js";
@@ -77,24 +78,28 @@ class BookmarkRepository {
   }
 
   async getMostSavedCategory(userId) {
-    const bookmarks = await Bookmark.find({ userId }).populate(
-      "pollId",
-      "category"
-    );
-    const categoryCounts = {};
-    bookmarks.forEach((b) => {
-      const cat = b.pollId?.category || "Uncategorized";
-      categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-    });
-    let topCategory = "Uncategorized";
-    let maxCount = 0;
-    for (const [cat, count] of Object.entries(categoryCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        topCategory = cat;
-      }
-    }
-    return topCategory;
+    const result = await Bookmark.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      {
+        $lookup: {
+          from: "polls",
+          localField: "pollId",
+          foreignField: "_id",
+          as: "poll",
+        },
+      },
+      { $unwind: "$poll" },
+      {
+        $group: {
+          _id: "$poll.category",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 1 },
+    ]);
+
+    return result[0]?._id || "Uncategorized";
   }
 
   async getMostPopularSavedPoll(userId) {

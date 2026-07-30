@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { env } from "../config/env.js";
+import logger from "../utils/logger.js";
 
 cloudinary.config({
   cloud_name: env.cloudinary.cloudName,
@@ -33,7 +34,7 @@ export class CloudinaryService {
       await cloudinary.uploader.destroy(publicId);
       return true;
     } catch (error) {
-      console.error("Cloudinary delete error:", error);
+      logger.error("Cloudinary delete error:", error);
       return false;
     }
   }

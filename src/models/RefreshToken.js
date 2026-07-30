@@ -33,6 +33,7 @@ const refreshTokenSchema = new Schema(
 );
 
 refreshTokenSchema.index({ userId: 1, createdAt: -1 });
+refreshTokenSchema.index({ userId: 1, hashedToken: 1 }, { unique: true });
 
 export default mongoose.models.RefreshToken ||
   mongoose.model("RefreshToken", refreshTokenSchema);

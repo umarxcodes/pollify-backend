@@ -14,6 +14,11 @@ class SearchRepository {
     limit = 20
   ) {
     const skip = (page - 1) * limit;
+
+    if (!query || query.trim().length < 2) {
+      return { polls: [], total: 0 };
+    }
+
     let searchQuery = { status: "active", $text: { $search: query } };
 
     if (filters.category) {
@@ -59,7 +64,11 @@ class SearchRepository {
   async searchUsers(query, page = 1, limit = 20) {
     const skip = (page - 1) * limit;
     const users = await User.find(
-      { $text: { $search: query } },
+      {
+        $text: { $search: query },
+        isVerified: true,
+        isSuspended: { $ne: true },
+      },
       { score: { $meta: "textScore" } }
     )
       .select("name username profileImage bio createdAt")
@@ -67,7 +76,11 @@ class SearchRepository {
       .limit(limit)
       .sort({ score: { $meta: "textScore" } });
 
-    const total = await User.countDocuments({ $text: { $search: query } });
+    const total = await User.countDocuments({
+      $text: { $search: query },
+      isVerified: true,
+      isSuspended: { $ne: true },
+    });
 
     return { users, total };
   }
@@ -296,6 +309,10 @@ class SearchRepository {
   }
 
   async getSearchSuggestions(query) {
+    if (!query || query.trim().length < 2) {
+      return { polls: [], users: [], categories: [] };
+    }
+
     const pollSuggestions = await Poll.find(
       { status: "active", $text: { $search: query } },
       { score: { $meta: "textScore" } }
@@ -305,7 +322,11 @@ class SearchRepository {
       .limit(5);
 
     const userSuggestions = await User.find(
-      { $text: { $search: query } },
+      {
+        $text: { $search: query },
+        isVerified: true,
+        isSuspended: { $ne: true },
+      },
       { score: { $meta: "textScore" } }
     )
       .select("username name")

@@ -1,6 +1,14 @@
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 const shell = (title, content) => `
   <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">
-    <h2 style="color:#2563eb">${title}</h2>${content}
+    <h2 style="color:#2563eb">${escapeHtml(title)}</h2>${content}
     <p style="color:#6b7280;font-size:13px">Pollify Team</p>
   </div>`;
 
@@ -9,7 +17,7 @@ export const verificationEmail = (name, otp, expiresIn) => ({
   text: `Hello ${name}, your verification code is ${otp}. It expires in ${expiresIn}.`,
   html: shell(
     "Verify your Pollify account",
-    `<p>Hello ${name},</p><p>Your verification code is:</p><p style="font-size:28px;font-weight:bold;letter-spacing:4px">${otp}</p><p>It expires in ${expiresIn}.</p>`
+    `<p>Hello ${escapeHtml(name)},</p><p>Your verification code is:</p><p style="font-size:28px;font-weight:bold;letter-spacing:4px">${escapeHtml(otp)}</p><p>It expires in ${escapeHtml(expiresIn)}.</p>`
   ),
 });
 
@@ -18,7 +26,7 @@ export const passwordResetEmail = (name, resetUrl) => ({
   text: `Hello ${name}, reset your password using this link: ${resetUrl}. This link expires in 15 minutes.`,
   html: shell(
     "Reset your password",
-    `<p>Hello ${name},</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 15 minutes.</p>`
+    `<p>Hello ${escapeHtml(name)},</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 15 minutes.</p>`
   ),
 });
 
@@ -27,6 +35,6 @@ export const passwordChangedEmail = (name) => ({
   text: `Hello ${name}, your Pollify password was changed. If this was not you, contact support immediately.`,
   html: shell(
     "Password changed",
-    `<p>Hello ${name},</p><p>Your password was changed. If this was not you, contact support immediately.</p>`
+    `<p>Hello ${escapeHtml(name)},</p><p>Your password was changed. If this was not you, contact support immediately.</p>`
   ),
 });

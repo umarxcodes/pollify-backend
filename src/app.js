@@ -1,6 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
+import compression from "compression";
 import rateLimit from "express-rate-limit";
 import mongoSanitize from "mongo-sanitize";
 import pinoHttp from "pino-http";
@@ -25,6 +26,7 @@ import {
   setCsrfCookie,
   verifyCsrfToken,
 } from "./middlewares/csrf.middleware.js";
+import { ApiError } from "./utils/apiError.js";
 
 const logger = pino({
   level: process.env.NODE_ENV === "production" ? "info" : "debug",
@@ -70,9 +72,28 @@ const generalLimiter = rateLimit({
 });
 app.use(generalLimiter);
 
+// Response compression
+app.use(compression());
+
 // Body parsing with size limits to prevent payload attacks
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+
+// Handle body parser errors
+app.use((err, req, res, next) => {
+  if (
+    err &&
+    err instanceof SyntaxError &&
+    err.status === 400 &&
+    "body" in err
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid JSON payload",
+    });
+  }
+  next(err);
+});
 
 // Cookie parser for JWT token handling
 app.use(cookieParser());
