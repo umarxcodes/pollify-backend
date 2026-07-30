@@ -89,15 +89,15 @@ Pollify Backend is a RESTful API service that powers the Pollify polling platfor
 
 ### Design Patterns
 
-| Pattern | Usage |
-|---|---|
-| **Clean Architecture** | Modules are self-contained with their own routes, controllers, services, repositories, validations, and middlewares |
-| **Repository Pattern** | All database access is abstracted behind repository classes |
-| **Service Layer** | Business logic is isolated from HTTP concerns |
-| **Middleware Pipeline** | Cross-cutting concerns (auth, validation, CSRF, rate limiting) are composable |
-| **Dependency Injection** | Services instantiate their own repositories; controllers consume services |
-| **Factory Pattern** | JWT service, mail service, and Cloudinary service encapsulate third-party client creation |
-| **Strategy Pattern** | Multiple chart types (pie, bar, line, area) and time analytics intervals |
+| Pattern                  | Usage                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| **Clean Architecture**   | Modules are self-contained with their own routes, controllers, services, repositories, validations, and middlewares |
+| **Repository Pattern**   | All database access is abstracted behind repository classes                                                         |
+| **Service Layer**        | Business logic is isolated from HTTP concerns                                                                       |
+| **Middleware Pipeline**  | Cross-cutting concerns (auth, validation, CSRF, rate limiting) are composable                                       |
+| **Dependency Injection** | Services instantiate their own repositories; controllers consume services                                           |
+| **Factory Pattern**      | JWT service, mail service, and Cloudinary service encapsulate third-party client creation                           |
+| **Strategy Pattern**     | Multiple chart types (pie, bar, line, area) and time analytics intervals                                            |
 
 ---
 
@@ -253,13 +253,13 @@ polling-backend/
 
 ### Prerequisites
 
-| Requirement | Version | Purpose |
-|---|---|---|
-| Node.js | 22.x+ | Runtime |
-| Yarn | 1.x+ | Package manager |
-| MongoDB | 5.x+ | Primary database (local or Atlas) |
-| SMTP | — | Email delivery (Gmail, SendGrid, Resend, etc.) |
-| Cloudinary | — | Image upload and CDN |
+| Requirement | Version | Purpose                                        |
+| ----------- | ------- | ---------------------------------------------- |
+| Node.js     | 22.x+   | Runtime                                        |
+| Yarn        | 1.x+    | Package manager                                |
+| MongoDB     | 5.x+    | Primary database (local or Atlas)              |
+| SMTP        | —       | Email delivery (Gmail, SendGrid, Resend, etc.) |
+| Cloudinary  | —       | Image upload and CDN                           |
 
 ### Setup Steps
 
@@ -326,58 +326,58 @@ Create a `.env` file in the project root. All variables are required unless mark
 
 ### Server
 
-| Variable | Default | Description |
-|---|---|---|
-| `NODE_ENV` | `development` | `development` \| `production` |
-| `PORT` | `5000` | Server port (Vercel injects this automatically) |
-| `CORS_ORIGIN` | `http://localhost:5173` | Comma-separated allowed origins |
-| `FRONTEND_URL` | `http://localhost:5173` | Used for email links and redirects |
-| `COOKIE_SECURE` | auto | `true` in production; set explicitly for other environments |
+| Variable        | Default                 | Description                                                 |
+| --------------- | ----------------------- | ----------------------------------------------------------- |
+| `NODE_ENV`      | `development`           | `development` \| `production`                               |
+| `PORT`          | `5000`                  | Server port (Vercel injects this automatically)             |
+| `CORS_ORIGIN`   | `http://localhost:5173` | Comma-separated allowed origins                             |
+| `FRONTEND_URL`  | `http://localhost:5173` | Used for email links and redirects                          |
+| `COOKIE_SECURE` | auto                    | `true` in production; set explicitly for other environments |
 
 ### Database
 
-| Variable | Description |
-|---|---|
+| Variable    | Description                                |
+| ----------- | ------------------------------------------ |
 | `MONGO_URI` | MongoDB connection string (Atlas or local) |
 
 ### JWT
 
-| Variable | Default | Description |
-|---|---|---|
-| `JWT_ACCESS_SECRET` | — | Secret for access token signing (**required**, min 32 chars) |
-| `JWT_REFRESH_SECRET` | — | Secret for refresh token signing (**required**, min 32 chars) |
-| `JWT_ACCESS_EXPIRY` | `15m` | Access token TTL |
-| `JWT_REFRESH_EXPIRY` | `7d` | Refresh token TTL |
+| Variable             | Default | Description                                                   |
+| -------------------- | ------- | ------------------------------------------------------------- |
+| `JWT_ACCESS_SECRET`  | —       | Secret for access token signing (**required**, min 32 chars)  |
+| `JWT_REFRESH_SECRET` | —       | Secret for refresh token signing (**required**, min 32 chars) |
+| `JWT_ACCESS_EXPIRY`  | `15m`   | Access token TTL                                              |
+| `JWT_REFRESH_EXPIRY` | `7d`    | Refresh token TTL                                             |
 
 ### Security
 
-| Variable | Default | Description |
-|---|---|---|
-| `BCRYPT_SALT_ROUNDS` | `12` | Password hashing cost factor |
-| `OTP_SALT_ROUNDS` | `10` | OTP hashing cost factor |
-| `OTP_EXPIRY_IN_MINUTES` | `10` | OTP validity window |
-| `OTP_MAX_ATTEMPTS` | `5` | Max OTP verification attempts |
-| `OTP_RESEND_COOLDOWN_SECONDS` | `60` | Cooldown before OTP resend |
-| `LOGIN_MAX_ATTEMPTS` | `5` | Failed logins before lockout |
-| `LOGIN_LOCK_MINUTES` | `15` | Account lockout duration |
+| Variable                      | Default | Description                   |
+| ----------------------------- | ------- | ----------------------------- |
+| `BCRYPT_SALT_ROUNDS`          | `12`    | Password hashing cost factor  |
+| `OTP_SALT_ROUNDS`             | `10`    | OTP hashing cost factor       |
+| `OTP_EXPIRY_IN_MINUTES`       | `10`    | OTP validity window           |
+| `OTP_MAX_ATTEMPTS`            | `5`     | Max OTP verification attempts |
+| `OTP_RESEND_COOLDOWN_SECONDS` | `60`    | Cooldown before OTP resend    |
+| `LOGIN_MAX_ATTEMPTS`          | `5`     | Failed logins before lockout  |
+| `LOGIN_LOCK_MINUTES`          | `15`    | Account lockout duration      |
 
 ### Email (SMTP)
 
-| Variable | Default | Description |
-|---|---|---|
-| `SMTP_HOST` | — | SMTP server hostname |
-| `SMTP_PORT` | `587` | SMTP port (587 for STARTTLS, 465 for SSL) |
-| `SMTP_SECURE` | `false` | `true` for port 465 (implicit TLS) |
-| `SMTP_USER` | — | SMTP authentication username |
-| `SMTP_PASS` | — | SMTP authentication password |
-| `SMTP_FROM` | — | Sender email address |
+| Variable      | Default | Description                               |
+| ------------- | ------- | ----------------------------------------- |
+| `SMTP_HOST`   | —       | SMTP server hostname                      |
+| `SMTP_PORT`   | `587`   | SMTP port (587 for STARTTLS, 465 for SSL) |
+| `SMTP_SECURE` | `false` | `true` for port 465 (implicit TLS)        |
+| `SMTP_USER`   | —       | SMTP authentication username              |
+| `SMTP_PASS`   | —       | SMTP authentication password              |
+| `SMTP_FROM`   | —       | Sender email address                      |
 
 ### Cloudinary
 
-| Variable | Description |
-|---|---|
+| Variable                | Description           |
+| ----------------------- | --------------------- |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_KEY`    | Cloudinary API key    |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret |
 
 ---
@@ -469,90 +469,90 @@ http://localhost:5000/api/v1
 
 #### Authentication
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/auth/register` | No | Register new user with OTP |
-| POST | `/auth/verify-email` | No | Verify email with OTP |
-| POST | `/auth/resend-verification` | No | Resend verification OTP |
-| POST | `/auth/login` | No | Login with username/email + password |
-| POST | `/auth/refresh-token` | Cookie | Rotate access token |
-| POST | `/auth/logout` | Cookie | Revoke refresh session |
-| POST | `/auth/forgot-password` | No | Request password reset |
-| POST | `/auth/reset-password` | No | Reset with token |
-| PATCH | `/auth/change-password` | Yes | Change password |
-| GET | `/auth/me` | Yes | Get current user |
-| PATCH | `/auth/profile` | Yes | Update profile |
+| Method | Endpoint                    | Auth   | Description                          |
+| ------ | --------------------------- | ------ | ------------------------------------ |
+| POST   | `/auth/register`            | No     | Register new user with OTP           |
+| POST   | `/auth/verify-email`        | No     | Verify email with OTP                |
+| POST   | `/auth/resend-verification` | No     | Resend verification OTP              |
+| POST   | `/auth/login`               | No     | Login with username/email + password |
+| POST   | `/auth/refresh-token`       | Cookie | Rotate access token                  |
+| POST   | `/auth/logout`              | Cookie | Revoke refresh session               |
+| POST   | `/auth/forgot-password`     | No     | Request password reset               |
+| POST   | `/auth/reset-password`      | No     | Reset with token                     |
+| PATCH  | `/auth/change-password`     | Yes    | Change password                      |
+| GET    | `/auth/me`                  | Yes    | Get current user                     |
+| PATCH  | `/auth/profile`             | Yes    | Update profile                       |
 
 #### Votes
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/votes/polls/:pollId/vote` | Yes | Cast vote |
-| PATCH | `/votes/polls/:pollId/vote` | Yes | Change vote |
-| DELETE | `/votes/polls/:pollId/vote` | Yes | Remove vote |
-| GET | `/votes/polls/:pollId/my-vote` | Yes | Get my vote |
-| GET | `/votes/polls/:pollId/voters` | No | Get voters |
-| GET | `/votes/polls/:pollId/results` | No | Get poll results |
+| Method | Endpoint                       | Auth | Description      |
+| ------ | ------------------------------ | ---- | ---------------- |
+| POST   | `/votes/polls/:pollId/vote`    | Yes  | Cast vote        |
+| PATCH  | `/votes/polls/:pollId/vote`    | Yes  | Change vote      |
+| DELETE | `/votes/polls/:pollId/vote`    | Yes  | Remove vote      |
+| GET    | `/votes/polls/:pollId/my-vote` | Yes  | Get my vote      |
+| GET    | `/votes/polls/:pollId/voters`  | No   | Get voters       |
+| GET    | `/votes/polls/:pollId/results` | No   | Get poll results |
 
 #### Comments
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/comments/polls/:pollId/comments` | Yes | Add comment |
-| GET | `/comments/polls/:pollId/comments` | No | Get comments |
-| PATCH | `/comments/:commentId` | Yes | Edit comment |
-| DELETE | `/comments/:commentId` | Yes | Delete comment |
-| POST | `/comments/:commentId/replies` | Yes | Reply to comment |
-| POST | `/comments/:commentId/like` | Yes | Like comment |
-| DELETE | `/comments/:commentId/like` | Yes | Unlike comment |
-| PATCH | `/comments/:commentId/pin` | Yes | Pin comment |
-| POST | `/comments/:commentId/report` | Yes | Report comment |
+| Method | Endpoint                           | Auth | Description      |
+| ------ | ---------------------------------- | ---- | ---------------- |
+| POST   | `/comments/polls/:pollId/comments` | Yes  | Add comment      |
+| GET    | `/comments/polls/:pollId/comments` | No   | Get comments     |
+| PATCH  | `/comments/:commentId`             | Yes  | Edit comment     |
+| DELETE | `/comments/:commentId`             | Yes  | Delete comment   |
+| POST   | `/comments/:commentId/replies`     | Yes  | Reply to comment |
+| POST   | `/comments/:commentId/like`        | Yes  | Like comment     |
+| DELETE | `/comments/:commentId/like`        | Yes  | Unlike comment   |
+| PATCH  | `/comments/:commentId/pin`         | Yes  | Pin comment      |
+| POST   | `/comments/:commentId/report`      | Yes  | Report comment   |
 
 #### Search
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| GET | `/search` | No | Global search |
-| GET | `/search/polls` | No | Search polls |
-| GET | `/search/users` | No | Search users |
-| GET | `/search/categories` | No | Get categories |
-| GET | `/search/trending` | No | Trending polls |
-| GET | `/search/popular` | No | Popular polls |
-| GET | `/search/latest` | No | Latest polls |
-| GET | `/search/ending-soon` | No | Polls ending within 24h |
-| GET | `/search/suggestions` | No | Search suggestions |
+| Method | Endpoint              | Auth | Description             |
+| ------ | --------------------- | ---- | ----------------------- |
+| GET    | `/search`             | No   | Global search           |
+| GET    | `/search/polls`       | No   | Search polls            |
+| GET    | `/search/users`       | No   | Search users            |
+| GET    | `/search/categories`  | No   | Get categories          |
+| GET    | `/search/trending`    | No   | Trending polls          |
+| GET    | `/search/popular`     | No   | Popular polls           |
+| GET    | `/search/latest`      | No   | Latest polls            |
+| GET    | `/search/ending-soon` | No   | Polls ending within 24h |
+| GET    | `/search/suggestions` | No   | Search suggestions      |
 
 #### Admin
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| GET | `/admin/dashboard` | Admin | Dashboard statistics |
-| GET | `/admin/users` | Admin | User management |
-| PATCH | `/admin/users/:id/role` | Super Admin | Update role |
-| PATCH | `/admin/users/:id/suspend` | Admin | Suspend user |
-| DELETE | `/admin/users/:id` | Super Admin | Delete user |
-| GET | `/admin/polls` | Admin | Poll management |
-| GET | `/admin/comments` | Admin | Comment management |
-| GET | `/admin/categories` | Admin | Category management |
-| GET | `/admin/audit-logs` | Super Admin | Audit trail |
-| GET | `/admin/analytics` | Admin | Admin analytics |
+| Method | Endpoint                   | Auth        | Description          |
+| ------ | -------------------------- | ----------- | -------------------- |
+| GET    | `/admin/dashboard`         | Admin       | Dashboard statistics |
+| GET    | `/admin/users`             | Admin       | User management      |
+| PATCH  | `/admin/users/:id/role`    | Super Admin | Update role          |
+| PATCH  | `/admin/users/:id/suspend` | Admin       | Suspend user         |
+| DELETE | `/admin/users/:id`         | Super Admin | Delete user          |
+| GET    | `/admin/polls`             | Admin       | Poll management      |
+| GET    | `/admin/comments`          | Admin       | Comment management   |
+| GET    | `/admin/categories`        | Admin       | Category management  |
+| GET    | `/admin/audit-logs`        | Super Admin | Audit trail          |
+| GET    | `/admin/analytics`         | Admin       | Admin analytics      |
 
 ### Error Codes
 
-| Status | Meaning |
-|---|---|
-| 200 | Success |
-| 201 | Created |
-| 202 | Accepted |
-| 400 | Validation Error |
-| 401 | Unauthorized |
-| 403 | Forbidden |
-| 404 | Not Found |
-| 409 | Conflict |
-| 413 | Payload Too Large |
-| 423 | Locked |
-| 429 | Too Many Requests |
-| 500 | Internal Server Error |
+| Status | Meaning               |
+| ------ | --------------------- |
+| 200    | Success               |
+| 201    | Created               |
+| 202    | Accepted              |
+| 400    | Validation Error      |
+| 401    | Unauthorized          |
+| 403    | Forbidden             |
+| 404    | Not Found             |
+| 409    | Conflict              |
+| 413    | Payload Too Large     |
+| 423    | Locked                |
+| 429    | Too Many Requests     |
+| 500    | Internal Server Error |
 
 ---
 
@@ -594,10 +594,10 @@ The project has been production-level tested with curl against all modules (Auth
 
 ### GitHub Actions Workflows
 
-| Workflow | File | Trigger | Purpose |
-|---|---|---|---|
-| CI | `.github/workflows/ci.yml` | Push/PR to `main`, `development` | Lint, format check, security audit |
-| CD | `.github/workflows/cd.yml` | CI success on `main`, `development` | Deploy to Vercel |
+| Workflow | File                       | Trigger                             | Purpose                            |
+| -------- | -------------------------- | ----------------------------------- | ---------------------------------- |
+| CI       | `.github/workflows/ci.yml` | Push/PR to `main`, `development`    | Lint, format check, security audit |
+| CD       | `.github/workflows/cd.yml` | CI success on `main`, `development` | Deploy to Vercel                   |
 
 ### CI Pipeline
 
@@ -621,20 +621,20 @@ The project has been production-level tested with curl against all modules (Auth
 
 **Branch Strategy:**
 
-| Branch | Environment | Auto-Deploy |
-|---|---|---|
-| `main` | Production | Yes (after CI) |
-| `development` | Preview | Yes (after CI) |
+| Branch        | Environment | Auto-Deploy    |
+| ------------- | ----------- | -------------- |
+| `main`        | Production  | Yes (after CI) |
+| `development` | Preview     | Yes (after CI) |
 
 ### Required GitHub Secrets
 
 Add these in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Secret | Description |
-|---|---|
-| `VERCEL_TOKEN` | Vercel access token (scoped to project) |
-| `VERCEL_ORG_ID` | Vercel team or user ID |
-| `VERCEL_PROJECT_ID` | Vercel project ID |
+| Secret              | Description                             |
+| ------------------- | --------------------------------------- |
+| `VERCEL_TOKEN`      | Vercel access token (scoped to project) |
+| `VERCEL_ORG_ID`     | Vercel team or user ID                  |
+| `VERCEL_PROJECT_ID` | Vercel project ID                       |
 
 ---
 
@@ -678,6 +678,7 @@ docker compose up --build
 ```
 
 Services:
+
 - `backend` — Pollify API on port 5000
 - `mongo` — MongoDB 7 on port 27017 with persistent volume
 
@@ -687,17 +688,17 @@ Services:
 
 > Placeholder for application screenshots and deployment previews.
 
-| Section | Description |
-|---|---|
-| API Health Check | `GET /health` returning 200 OK |
+| Section             | Description                                            |
+| ------------------- | ------------------------------------------------------ |
+| API Health Check    | `GET /health` returning 200 OK                         |
 | Authentication Flow | Register → Verify OTP → Login → Access Protected Route |
-| Poll Creation | Create poll with multiple options |
-| Voting | Cast vote and view live results |
-| Comments | Add comment with nested replies and likes |
-| Search | Global search with suggestions and filters |
-| Admin Dashboard | Platform statistics and user management |
-| Vercel Deployment | Live production URL |
-| GitHub Actions | CI/CD pipeline passing |
+| Poll Creation       | Create poll with multiple options                      |
+| Voting              | Cast vote and view live results                        |
+| Comments            | Add comment with nested replies and likes              |
+| Search              | Global search with suggestions and filters             |
+| Admin Dashboard     | Platform statistics and user management                |
+| Vercel Deployment   | Live production URL                                    |
+| GitHub Actions      | CI/CD pipeline passing                                 |
 
 ---
 
@@ -713,14 +714,14 @@ Services:
 
 ### Commit Convention
 
-| Type | Description |
-|---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation changes |
-| `refactor` | Code refactoring |
-| `test` | Adding or updating tests |
-| `chore` | Maintenance tasks |
+| Type       | Description              |
+| ---------- | ------------------------ |
+| `feat`     | New feature              |
+| `fix`      | Bug fix                  |
+| `docs`     | Documentation changes    |
+| `refactor` | Code refactoring         |
+| `test`     | Adding or updating tests |
+| `chore`    | Maintenance tasks        |
 
 ### Code Standards
 
