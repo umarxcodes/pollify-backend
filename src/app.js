@@ -39,14 +39,19 @@ app.use(pinoHttp({ logger }));
 app.use(helmet());
 
 // CORS with strict origin allowlist from env
+const corsOrigins = env.corsOrigins;
+const isDev = env.nodeEnv === "development";
+
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || env.corsOrigins.includes(origin))
-      return callback(null, true);
+    if (!origin) return callback(null, true);
+    if (corsOrigins.includes("*")) return callback(null, true);
+    if (corsOrigins.includes(origin)) return callback(null, true);
     return callback(new Error("Origin is not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
+  exposedHeaders: ["X-CSRF-Token"],
   credentials: true,
   maxAge: 86400,
 };
