@@ -7,6 +7,7 @@ import mongoSanitize from "mongo-sanitize";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
 import logger from "./utils/logger.js";
+import connectDB from "./config/db.config.js";
 
 import "./config/env.js";
 import { env } from "./config/env.js";
@@ -29,6 +30,18 @@ import {
 } from "./middlewares/csrf.middleware.js";
 
 const app = express();
+
+// Vercel invokes the exported Express app directly, so server.js does not run
+// its local startServer() database bootstrap there. Connect lazily before any
+// database-backed API route; connectDB caches successful warm connections.
+const ensureDatabaseConnection = async (_req, _res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 // HTTP request logging with correlation IDs
 app.use(pinoHttp({ logger }));
@@ -123,17 +136,47 @@ app.get("/", (req, res) => {
 });
 
 // Feature routes
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/users", verifyCsrfToken, userRoutes);
-app.use("/api/v1/polls", verifyCsrfToken, pollRoutes);
-app.use("/api/v1/votes", verifyCsrfToken, voteRoutes);
-app.use("/api/v1/analytics", verifyCsrfToken, analyticsRoutes);
-app.use("/api/v1/comments", verifyCsrfToken, commentRoutes);
-app.use("/api/v1/bookmarks", verifyCsrfToken, bookmarkRoutes);
-app.use("/api/v1/notifications", verifyCsrfToken, notificationRoutes);
-app.use("/api/v1/search", searchRoutes);
-app.use("/api/v1/reports", verifyCsrfToken, reportRoutes);
-app.use("/api/v1/admin", verifyCsrfToken, adminRoutes);
+app.use("/api/v1/auth", ensureDatabaseConnection, authRoutes);
+app.use("/api/v1/users", ensureDatabaseConnection, verifyCsrfToken, userRoutes);
+app.use("/api/v1/polls", ensureDatabaseConnection, verifyCsrfToken, pollRoutes);
+app.use("/api/v1/votes", ensureDatabaseConnection, verifyCsrfToken, voteRoutes);
+app.use(
+  "/api/v1/analytics",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  analyticsRoutes
+);
+app.use(
+  "/api/v1/comments",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  commentRoutes
+);
+app.use(
+  "/api/v1/bookmarks",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  bookmarkRoutes
+);
+app.use(
+  "/api/v1/notifications",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  notificationRoutes
+);
+app.use("/api/v1/search", ensureDatabaseConnection, searchRoutes);
+app.use(
+  "/api/v1/reports",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  reportRoutes
+);
+app.use(
+  "/api/v1/admin",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  adminRoutes
+);
 
 // Multer file upload error handler
 app.use((error, req, res, next) => {
