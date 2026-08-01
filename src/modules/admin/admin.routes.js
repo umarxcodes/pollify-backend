@@ -230,6 +230,14 @@ router.get(
   validate(getAuditLogsValidation),
   AdminController.getAuditLogs
 );
+router.get(
+  "/audit-logs/export",
+  authenticate,
+  authorize("super_admin"),
+  adminLimiter,
+  validate(getAuditLogsValidation),
+  AdminController.exportAuditLogs
+);
 
 // Analytics
 router.get(
