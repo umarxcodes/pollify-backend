@@ -22,6 +22,7 @@ import notificationRoutes from "./modules/notification/notification.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import organizationRoutes from "./modules/organization/organization.routes.js";
+import followRoutes from "./modules/follow/follow.routes.js";
 import reportRoutes from "./modules/report/report.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 import {
@@ -183,6 +184,12 @@ app.use(
   ensureDatabaseConnection,
   verifyCsrfToken,
   organizationRoutes
+);
+app.use(
+  "/api/v1/follow",
+  ensureDatabaseConnection,
+  verifyCsrfToken,
+  followRoutes
 );
 
 // Multer file upload error handler
