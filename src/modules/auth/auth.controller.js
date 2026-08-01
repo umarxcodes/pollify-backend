@@ -70,7 +70,15 @@ class AuthController {
         req.ip
       );
       setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
-      res.status(200).json(Response.success(200, { accessToken: tokens.accessToken }, "Token refreshed"));
+      res
+        .status(200)
+        .json(
+          Response.success(
+            200,
+            { accessToken: tokens.accessToken },
+            "Token refreshed"
+          )
+        );
     } catch (error) {
       next(error);
     }

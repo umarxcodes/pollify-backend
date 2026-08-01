@@ -2,10 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../../middlewares/authenticate.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import FollowController from "./follow.controller.js";
-import {
-  followValidation,
-  getUserValidation,
-} from "./follow.validation.js";
+import { followValidation, getUserValidation } from "./follow.validation.js";
 
 const router = Router();
 

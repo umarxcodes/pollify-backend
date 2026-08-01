@@ -285,7 +285,10 @@ class AdminController {
     try {
       const result = await adminService.exportAuditLogs(req.query);
       res.setHeader("Content-Type", "text/csv");
-      res.setHeader("Content-Disposition", `attachment; filename=audit-logs-${Date.now()}.csv`);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=audit-logs-${Date.now()}.csv`
+      );
       res.status(200).send(result);
     } catch (error) {
       next(error);

@@ -383,7 +383,15 @@ class AdminService {
     const result = await adminRepository.getAuditLogs(filters, 1, 1000);
     const logs = result.logs || [];
 
-    const headers = ["ID", "Action", "Target Type", "Target ID", "Admin", "Details", "Created At"];
+    const headers = [
+      "ID",
+      "Action",
+      "Target Type",
+      "Target ID",
+      "Admin",
+      "Details",
+      "Created At",
+    ];
     const rows = logs.map((log) => [
       log._id,
       log.action,
@@ -395,7 +403,9 @@ class AdminService {
     ]);
 
     const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+      )
       .join("\n");
 
     return csv;

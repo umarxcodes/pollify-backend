@@ -9,7 +9,10 @@ class FollowService {
       throw new ApiError(400, "You cannot follow yourself");
     }
 
-    const existingFollow = await followRepository.findFollow(followerId, followingId);
+    const existingFollow = await followRepository.findFollow(
+      followerId,
+      followingId
+    );
     if (existingFollow) {
       throw new ApiError(409, "You are already following this user");
     }
@@ -20,7 +23,10 @@ class FollowService {
   }
 
   async unfollowUser(followerId, followingId) {
-    const existingFollow = await followRepository.findFollow(followerId, followingId);
+    const existingFollow = await followRepository.findFollow(
+      followerId,
+      followingId
+    );
     if (!existingFollow) {
       throw new ApiError(404, "You are not following this user");
     }
@@ -71,8 +77,15 @@ class FollowService {
   }
 
   async checkFollowStatus(followerId, followingId) {
-    const isFollowing = await followRepository.isFollowing(followerId, followingId);
-    return Response.success(200, { isFollowing: !!isFollowing }, "Follow status checked");
+    const isFollowing = await followRepository.isFollowing(
+      followerId,
+      followingId
+    );
+    return Response.success(
+      200,
+      { isFollowing: !!isFollowing },
+      "Follow status checked"
+    );
   }
 
   async getUserStats(userId) {

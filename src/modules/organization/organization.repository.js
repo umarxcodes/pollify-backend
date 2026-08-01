@@ -19,7 +19,12 @@ class OrganizationRepository {
     const skip = (page - 1) * limit;
     let query = {};
 
-    const memberOrgs = await OrganizationMember.find({ user: userId, isActive: true }).select("organization").lean();
+    const memberOrgs = await OrganizationMember.find({
+      user: userId,
+      isActive: true,
+    })
+      .select("organization")
+      .lean();
     const orgIds = memberOrgs.map((m) => m.organization);
 
     query._id = { $in: orgIds };
@@ -62,7 +67,10 @@ class OrganizationRepository {
   }
 
   async getMember(orgId, userId) {
-    return await OrganizationMember.findOne({ organization: orgId, user: userId }).lean();
+    return await OrganizationMember.findOne({
+      organization: orgId,
+      user: userId,
+    }).lean();
   }
 
   async getMembers(orgId) {
@@ -81,16 +89,26 @@ class OrganizationRepository {
   }
 
   async removeMember(orgId, userId) {
-    return await OrganizationMember.findOneAndDelete({ organization: orgId, user: userId });
+    return await OrganizationMember.findOneAndDelete({
+      organization: orgId,
+      user: userId,
+    });
   }
 
   async isMember(orgId, userId) {
-    const member = await OrganizationMember.findOne({ organization: orgId, user: userId, isActive: true });
+    const member = await OrganizationMember.findOne({
+      organization: orgId,
+      user: userId,
+      isActive: true,
+    });
     return !!member;
   }
 
   async getMemberCount(orgId) {
-    return await OrganizationMember.countDocuments({ organization: orgId, isActive: true });
+    return await OrganizationMember.countDocuments({
+      organization: orgId,
+      isActive: true,
+    });
   }
 }
 

@@ -2,9 +2,22 @@ import { z } from "zod";
 
 export const createOrganizationValidation = z.object({
   body: z.object({
-    name: z.string().min(3, "Name must be at least 3 characters").max(100, "Name must be at most 100 characters"),
-    slug: z.string().min(3, "Slug must be at least 3 characters").max(50, "Slug must be at most 50 characters").regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"),
-    description: z.string().max(500, "Description must be at most 500 characters").optional(),
+    name: z
+      .string()
+      .min(3, "Name must be at least 3 characters")
+      .max(100, "Name must be at most 100 characters"),
+    slug: z
+      .string()
+      .min(3, "Slug must be at least 3 characters")
+      .max(50, "Slug must be at most 50 characters")
+      .regex(
+        /^[a-z0-9-]+$/,
+        "Slug can only contain lowercase letters, numbers, and hyphens"
+      ),
+    description: z
+      .string()
+      .max(500, "Description must be at most 500 characters")
+      .optional(),
     website: z.string().url("Invalid website URL").optional().or(z.literal("")),
     allowPublicPolls: z.boolean().optional(),
     requireApproval: z.boolean().optional(),

@@ -16,11 +16,20 @@ class OrganizationService {
 
     await organizationRepository.addMember(org._id, adminId, "owner", adminId);
 
-    return Response.success(201, { organization: org }, "Organization created successfully");
+    return Response.success(
+      201,
+      { organization: org },
+      "Organization created successfully"
+    );
   }
 
   async list(userId, page = 1, limit = 20, search) {
-    const result = await organizationRepository.list(userId, page, limit, search);
+    const result = await organizationRepository.list(
+      userId,
+      page,
+      limit,
+      search
+    );
     return Response.success(200, result, "Organizations fetched successfully");
   }
 
@@ -34,7 +43,11 @@ class OrganizationService {
     }
 
     const members = await organizationRepository.getMembers(org._id);
-    return Response.success(200, { organization: org, members }, "Organization fetched successfully");
+    return Response.success(
+      200,
+      { organization: org, members },
+      "Organization fetched successfully"
+    );
   }
 
   async update(slug, userId, data) {
@@ -47,7 +60,11 @@ class OrganizationService {
     }
 
     const updated = await organizationRepository.update(org._id, data);
-    return Response.success(200, { organization: updated }, "Organization updated successfully");
+    return Response.success(
+      200,
+      { organization: updated },
+      "Organization updated successfully"
+    );
   }
 
   async delete(slug, userId) {
@@ -75,10 +92,18 @@ class OrganizationService {
     const user = await User.findOne({ email: data.email });
     if (!user) throw new ApiError(404, "User not found");
 
-    const existingMember = await organizationRepository.getMember(org._id, user._id);
+    const existingMember = await organizationRepository.getMember(
+      org._id,
+      user._id
+    );
     if (existingMember) throw new ApiError(409, "User is already a member");
 
-    await organizationRepository.addMember(org._id, user._id, data.role || "member", userId);
+    await organizationRepository.addMember(
+      org._id,
+      user._id,
+      data.role || "member",
+      userId
+    );
 
     return Response.success(201, null, "Member invited successfully");
   }
@@ -88,7 +113,8 @@ class OrganizationService {
     if (!org) throw new ApiError(404, "Organization not found");
 
     const member = await organizationRepository.getMember(org._id, userId);
-    if (!member) throw new ApiError(403, "You are not a member of this organization");
+    if (!member)
+      throw new ApiError(403, "You are not a member of this organization");
 
     const members = await organizationRepository.getMembers(org._id);
     return Response.success(200, { members }, "Members fetched successfully");
@@ -103,7 +129,10 @@ class OrganizationService {
       throw new ApiError(403, "Only admins can update member roles");
     }
 
-    const targetMember = await organizationRepository.getMember(org._id, targetUserId);
+    const targetMember = await organizationRepository.getMember(
+      org._id,
+      targetUserId
+    );
     if (!targetMember) throw new ApiError(404, "Member not found");
 
     if (targetMember.role === "owner" && member.role !== "owner") {
@@ -123,7 +152,10 @@ class OrganizationService {
       throw new ApiError(403, "Only admins can remove members");
     }
 
-    const targetMember = await organizationRepository.getMember(org._id, targetUserId);
+    const targetMember = await organizationRepository.getMember(
+      org._id,
+      targetUserId
+    );
     if (!targetMember) throw new ApiError(404, "Member not found");
 
     if (targetMember.role === "owner") {

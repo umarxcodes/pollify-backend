@@ -16,7 +16,10 @@ const organizationSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"],
+      match: [
+        /^[a-z0-9-]+$/,
+        "Slug can only contain lowercase letters, numbers, and hyphens",
+      ],
       index: true,
     },
     description: {
@@ -58,4 +61,5 @@ const organizationSchema = new Schema(
 
 organizationSchema.index({ name: "text", slug: "text" });
 
-export default mongoose.models.Organization || mongoose.model("Organization", organizationSchema);
+export default mongoose.models.Organization ||
+  mongoose.model("Organization", organizationSchema);
