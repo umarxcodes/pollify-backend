@@ -379,6 +379,28 @@ class AdminService {
     );
   }
 
+  async exportAuditLogs(filters = {}) {
+    const result = await adminRepository.getAuditLogs(filters, 1, 1000);
+    const logs = result.logs || [];
+
+    const headers = ["ID", "Action", "Target Type", "Target ID", "Admin", "Details", "Created At"];
+    const rows = logs.map((log) => [
+      log._id,
+      log.action,
+      log.targetType,
+      log.targetId || "",
+      log.adminId?.name || log.adminId?.username || "",
+      log.details ? JSON.stringify(log.details) : "",
+      log.createdAt,
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+
+    return csv;
+  }
+
   // Settings
   async updateSettings(adminId, settings) {
     await adminRepository.createAuditLog({
