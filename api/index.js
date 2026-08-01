@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     await connectDB();
     return app(req, res);
-  } catch (error) {
+  } catch {
     return res.status(503).json({
       success: false,
       message: "Database connection is unavailable. Please try again shortly.",

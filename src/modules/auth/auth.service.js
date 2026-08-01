@@ -13,6 +13,7 @@ import {
 } from "../../services/mail.templates.js";
 import { verifyRefreshToken } from "../../services/jwt.service.js";
 import { CloudinaryService } from "../../services/cloudinary.service.js";
+import logger from "../../utils/logger.js";
 
 class AuthService {
   // Register a new user and trigger email verification
@@ -227,7 +228,16 @@ class AuthService {
   }
 
   async logout(refreshToken) {
-    if (refreshToken) await authTokenService.revokeRefreshToken(refreshToken);
+    if (refreshToken) {
+      try {
+        await authTokenService.revokeRefreshToken(refreshToken);
+      } catch (error) {
+        logger.error(
+          { err: error },
+          "Failed to revoke refresh token during logout"
+        );
+      }
+    }
     return Response.success(200, null, "Logged out successfully");
   }
 
