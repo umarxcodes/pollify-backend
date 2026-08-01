@@ -20,7 +20,13 @@
               "mode": "raw",
               "raw": "{\n  \"name\": \"Test User\",\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"securepass123\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/register", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "register"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "register"]
+            }
           }
         },
         {
@@ -35,7 +41,13 @@
               "mode": "raw",
               "raw": "{\n  \"email\": \"test@example.com\",\n  \"otp\": \"123456\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/verify-email", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "verify-email"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/verify-email",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "verify-email"]
+            }
           }
         },
         {
@@ -50,7 +62,13 @@
               "mode": "raw",
               "raw": "{\n  \"identifier\": \"testuser\",\n  \"password\": \"securepass123\",\n  \"rememberMe\": true\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/login", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "login"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "login"]
+            }
           }
         },
         {
@@ -61,7 +79,13 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/auth/refresh-token", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "refresh-token"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "refresh-token"]
+            }
           }
         },
         {
@@ -71,7 +95,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/auth/me", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "me"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "me"]
+            }
           }
         },
         {
@@ -87,7 +117,13 @@
               "mode": "raw",
               "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"bio\": \"Hello world\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/profile", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "profile"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "profile"]
+            }
           }
         },
         {
@@ -98,7 +134,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/auth/logout", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "logout"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "logout"]
+            }
           }
         },
         {
@@ -113,7 +155,13 @@
               "mode": "raw",
               "raw": "{\n  \"email\": \"test@example.com\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/forgot-password", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "forgot-password"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/forgot-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "forgot-password"]
+            }
           }
         },
         {
@@ -128,7 +176,13 @@
               "mode": "raw",
               "raw": "{\n  \"token\": \"{{reset_token}}\",\n  \"password\": \"newsecurepass456\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/auth/reset-password", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "reset-password"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/reset-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "auth", "reset-password"]
+            }
           }
         }
       ]
@@ -143,7 +197,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/users/testuser", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "users", "testuser"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users/testuser",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "users", "testuser"]
+            }
           }
         },
         {
@@ -159,7 +219,13 @@
               "mode": "raw",
               "raw": "{\n  \"fullName\": \"New Name\",\n  \"bio\": \"Updated bio\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/users/profile", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "users", "profile"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "users", "profile"]
+            }
           }
         }
       ]
@@ -180,7 +246,13 @@
               "mode": "raw",
               "raw": "{\n  \"title\": \"Best Framework?\",\n  \"description\": \"Vote for your favorite frontend framework\",\n  \"options\": [\n    { \"text\": \"React\" },\n    { \"text\": \"Vue\" },\n    { \"text\": \"Angular\" }\n  ],\n  \"type\": \"single\",\n  \"category\": \"Tech\",\n  \"allowVoteChange\": true,\n  \"expiresAt\": \"2026-12-31T23:59:59.000Z\",\n  \"tags\": [\"javascript\", \"frontend\"]\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/polls", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls"]
+            }
           }
         },
         {
@@ -190,7 +262,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/polls?page=1&limit=10&filter=latest&sort=newest", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls?page=1&limit=10&filter=latest&sort=newest",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls"]
+            }
           }
         },
         {
@@ -200,7 +278,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls", "{{poll_id}}"]
+            }
           }
         },
         {
@@ -216,7 +300,13 @@
               "mode": "raw",
               "raw": "{\n  \"title\": \"Updated Poll Title\",\n  \"description\": \"Updated description\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls", "{{poll_id}}"]
+            }
           }
         },
         {
@@ -227,7 +317,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls", "{{poll_id}}"]
+            }
           }
         },
         {
@@ -237,7 +333,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}/results", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "polls", "{{poll_id}}", "results"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/polls/{{poll_id}}/results",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "polls", "{{poll_id}}", "results"]
+            }
           }
         }
       ]
@@ -258,7 +360,13 @@
               "mode": "raw",
               "raw": "{\n  \"optionId\": \"{{poll_option_id}}\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"]
+            }
           }
         },
         {
@@ -274,7 +382,13 @@
               "mode": "raw",
               "raw": "{\n  \"optionId\": \"{{other_option_id}}\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"]
+            }
           }
         },
         {
@@ -285,7 +399,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/vote",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "vote"]
+            }
           }
         },
         {
@@ -295,7 +415,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/my-vote", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "my-vote"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/my-vote",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "my-vote"]
+            }
           }
         },
         {
@@ -305,7 +431,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/voters?page=1&limit=20", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "voters"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/voters?page=1&limit=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "voters"]
+            }
           }
         },
         {
@@ -315,7 +447,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/stats", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "stats"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/votes/polls/{{poll_id}}/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "votes", "polls", "{{poll_id}}", "stats"]
+            }
           }
         }
       ]
@@ -336,7 +474,20 @@
               "mode": "raw",
               "raw": "{\n  \"content\": \"Great poll!\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/comments/polls/{{poll_id}}/comments", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "comments", "polls", "{{poll_id}}", "comments"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/comments/polls/{{poll_id}}/comments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "polls",
+                "{{poll_id}}",
+                "comments"
+              ]
+            }
           }
         },
         {
@@ -346,7 +497,20 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/comments/polls/{{poll_id}}/comments?page=1&limit=20", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "comments", "polls", "{{poll_id}}", "comments"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/comments/polls/{{poll_id}}/comments?page=1&limit=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "polls",
+                "{{poll_id}}",
+                "comments"
+              ]
+            }
           }
         },
         {
@@ -357,7 +521,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/comments/{{comment_id}}/like", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "comments", "{{comment_id}}", "like"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/comments/{{comment_id}}/like",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "comments", "{{comment_id}}", "like"]
+            }
           }
         },
         {
@@ -368,7 +538,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/comments/{{comment_id}}/like", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "comments", "{{comment_id}}", "like"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/comments/{{comment_id}}/like",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "comments", "{{comment_id}}", "like"]
+            }
           }
         }
       ]
@@ -384,7 +560,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/bookmarks/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "bookmarks", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/bookmarks/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "bookmarks", "{{poll_id}}"]
+            }
           }
         },
         {
@@ -394,7 +576,13 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/bookmarks", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "bookmarks"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/bookmarks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "bookmarks"]
+            }
           }
         },
         {
@@ -405,7 +593,13 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/bookmarks/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "bookmarks", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/bookmarks/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "bookmarks", "{{poll_id}}"]
+            }
           }
         }
       ]
@@ -417,48 +611,96 @@
           "name": "Global Search",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search?q=react", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search?q=react",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search"]
+            }
           }
         },
         {
           "name": "Search Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/polls?q=tech", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "polls"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/polls?q=tech",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "polls"]
+            }
           }
         },
         {
           "name": "Get Trending Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/trending", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "trending"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/trending",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "trending"]
+            }
           }
         },
         {
           "name": "Get Popular Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/popular", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "popular"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/popular",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "popular"]
+            }
           }
         },
         {
           "name": "Get Latest Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/latest", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "latest"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/latest",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "latest"]
+            }
           }
         },
         {
           "name": "Get Ending Soon Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/ending-soon", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "ending-soon"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/ending-soon",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "ending-soon"]
+            }
           }
         },
         {
@@ -470,23 +712,45 @@
               { "key": "Authorization", "value": "Bearer {{access_token}}" },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/search/recent/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "recent", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/recent/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "recent", "{{poll_id}}"]
+            }
           }
         },
         {
           "name": "Get Search History",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/history", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "history"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/history",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "history"]
+            }
           }
         },
         {
           "name": "Get Search Suggestions",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/search/suggestions?q=re", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "search", "suggestions"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/search/suggestions?q=re",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "search", "suggestions"]
+            }
           }
         }
       ]
@@ -498,8 +762,16 @@
           "name": "Get Notifications",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/notifications", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "notifications"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/notifications",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "notifications"]
+            }
           }
         }
       ]
@@ -520,7 +792,13 @@
               "mode": "raw",
               "raw": "{\n  \"targetType\": \"poll\",\n  \"targetId\": \"{{poll_id}}\",\n  \"reason\": \"spam\",\n  \"description\": \"This poll is spam\"\n}"
             },
-            "url": { "raw": "http://localhost:5000/api/v1/reports", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "reports"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/reports",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "reports"]
+            }
           }
         }
       ]
@@ -532,32 +810,76 @@
           "name": "Dashboard Stats",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/dashboard", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "dashboard"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/dashboard",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "dashboard"]
+            }
           }
         },
         {
           "name": "Get All Users",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/users", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "users"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "users"]
+            }
           }
         },
         {
           "name": "Get All Polls",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/polls", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "polls"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/polls",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "polls"]
+            }
           }
         },
         {
           "name": "Get All Comments",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/comments", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "comments"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/comments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "comments"]
+            }
           }
         },
         {
@@ -565,10 +887,19 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{admin_access_token}}" },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/feature", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "feature"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/feature",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "feature"]
+            }
           }
         },
         {
@@ -576,10 +907,19 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{admin_access_token}}" },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/close", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "close"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/close",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "close"]
+            }
           }
         },
         {
@@ -587,10 +927,19 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{admin_access_token}}" },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "polls", "{{poll_id}}"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "polls", "{{poll_id}}"]
+            }
           }
         },
         {
@@ -598,26 +947,57 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{admin_access_token}}" },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              },
               { "key": "x-csrf-token", "value": "{{csrf_token}}" }
             ],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/restore", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "restore"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/polls/{{poll_id}}/restore",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "polls", "{{poll_id}}", "restore"]
+            }
           }
         },
         {
           "name": "Get Analytics",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/analytics", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "analytics"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/analytics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "analytics"]
+            }
           }
         },
         {
           "name": "Get Audit Logs",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{admin_access_token}}" }],
-            "url": { "raw": "http://localhost:5000/api/v1/admin/audit-logs", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "admin", "audit-logs"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/audit-logs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "audit-logs"]
+            }
           }
         }
       ]
@@ -629,14 +1009,26 @@
           "name": "Health Check",
           "request": {
             "method": "GET",
-            "url": { "raw": "http://localhost:5000/health", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["health"] }
+            "url": {
+              "raw": "http://localhost:5000/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["health"]
+            }
           }
         },
         {
           "name": "CSRF Token",
           "request": {
             "method": "GET",
-            "url": { "raw": "http://localhost:5000/api/v1/csrf-token", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "csrf-token"] }
+            "url": {
+              "raw": "http://localhost:5000/api/v1/csrf-token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "csrf-token"]
+            }
           }
         }
       ]

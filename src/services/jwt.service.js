@@ -1,11 +1,30 @@
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 
+const COMMON_SECRETS = new Set([
+  "change_me_to_a_random_32_char_min_string_production",
+  "change_me_to_another_random_32_char_min_string_production",
+  "secret",
+  "password",
+  "123456",
+  "jwt_secret",
+  "access_secret",
+  "refresh_secret",
+]);
+
 const requiredSecret = (secret, key) => {
-  if (!secret || secret.length < 32)
+  if (!secret || secret.length < 32) {
     throw new Error(
       `${key} must be set to a random value of at least 32 characters`
     );
+  }
+
+  if (COMMON_SECRETS.has(secret)) {
+    throw new Error(
+      `${key} must not be a common/placeholder value. Generate a secure random string.`
+    );
+  }
+
   return secret;
 };
 
