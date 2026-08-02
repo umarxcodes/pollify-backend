@@ -160,6 +160,80 @@ class ReportService {
     );
   }
 
+  async assignReport(adminId, reportId, moderatorId) {
+    const report = await reportRepository.findReportById(reportId);
+    if (!report) throw new ApiError(404, "Report not found");
+
+    const updated = await reportRepository.assignReport(reportId, moderatorId);
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "assign_report",
+      targetType: "report",
+      targetId: reportId,
+      details: { assignedTo: moderatorId },
+    });
+
+    return Response.success(
+      200,
+      { report: updated },
+      "Report assigned successfully"
+    );
+  }
+
+  async bulkUpdateReports(adminId, reportIds, updates) {
+    const reports = await reportRepository.bulkUpdateReports(reportIds, updates);
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "bulk_update_reports",
+      targetType: "report",
+      targetId: reportIds[0],
+      details: { count: reportIds.length, updates },
+    });
+
+    return Response.success(
+      200,
+      { modifiedCount: reports.modifiedCount },
+      "Reports updated successfully"
+    );
+  }
+
+  async getModerationStats() {
+    const analytics = await reportRepository.getReportAnalytics();
+    return Response.success(
+      200,
+      analytics,
+      "Moderation stats fetched successfully"
+    );
+  }
+
+  async escalateReport(adminId, reportId) {
+    const report = await reportRepository.findReportById(reportId);
+    if (!report) throw new ApiError(404, "Report not found");
+
+    const updated = await reportRepository.updateReportStatus(reportId, {
+      escalated: true,
+      escalatedAt: new Date(),
+      escalatedBy: adminId,
+      priority: "critical",
+    });
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "escalate_report",
+      targetType: "report",
+      targetId: reportId,
+      details: { reason: report.reason, targetType: report.targetType },
+    });
+
+    return Response.success(
+      200,
+      { report: updated },
+      "Report escalated successfully"
+    );
+  }
+
   async getReportAnalytics() {
     const analytics = await reportRepository.getReportAnalytics();
     return Response.success(

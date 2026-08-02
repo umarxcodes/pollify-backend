@@ -22,6 +22,10 @@ import {
   getReportsValidation,
   reportActionValidation,
   getNotificationsValidation,
+  assignReportValidation,
+  escalateReportValidation,
+  bulkUpdateReportsValidation,
+  getModerationStatsValidation,
 } from "./admin.validation.js";
 
 const router = Router();
@@ -204,6 +208,42 @@ router.patch(
   adminLimiter,
   validate(reportActionValidation),
   AdminController.rejectReport
+);
+
+router.patch(
+  "/reports/:id/assign",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(assignReportValidation),
+  AdminController.assignReport
+);
+
+router.patch(
+  "/reports/:id/escalate",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(escalateReportValidation),
+  AdminController.escalateReport
+);
+
+router.patch(
+  "/reports/bulk",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(bulkUpdateReportsValidation),
+  AdminController.bulkUpdateReports
+);
+
+router.get(
+  "/reports/moderation-stats",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(getModerationStatsValidation),
+  AdminController.getModerationStats
 );
 
 // Notifications

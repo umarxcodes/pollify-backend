@@ -79,9 +79,56 @@ class ReportController {
     }
   }
 
+  static async assignReport(req, res, next) {
+    try {
+      const result = await reportService.assignReport(
+        req.user.id,
+        req.params.reportId,
+        req.body.moderatorId
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async bulkUpdateReports(req, res, next) {
+    try {
+      const result = await reportService.bulkUpdateReports(
+        req.user.id,
+        req.body.reportIds,
+        req.body.updates
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async escalateReport(req, res, next) {
+    try {
+      const result = await reportService.escalateReport(
+        req.user.id,
+        req.params.reportId
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getReportAnalytics(req, res, next) {
     try {
       const result = await reportService.getReportAnalytics();
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getModerationStats(req, res, next) {
+    try {
+      const result = await reportService.getModerationStats();
       res.status(200).json(result);
     } catch (error) {
       next(error);

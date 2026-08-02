@@ -237,6 +237,50 @@ class AdminController {
     }
   }
 
+  static async assignReport(req, res, next) {
+    try {
+      const result = await adminService.assignReport(
+        req.user.id,
+        req.params.id,
+        req.body.moderatorId
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async escalateReport(req, res, next) {
+    try {
+      const result = await adminService.escalateReport(req.user.id, req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async bulkUpdateReports(req, res, next) {
+    try {
+      const result = await adminService.bulkUpdateReports(
+        req.user.id,
+        req.body.reportIds,
+        req.body.updates
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getModerationStats(req, res, next) {
+    try {
+      const result = await adminService.getModerationStats();
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getNotifications(req, res, next) {
     try {
       const result = await adminService.getNotifications(

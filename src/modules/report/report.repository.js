@@ -6,7 +6,11 @@ class ReportRepository {
   }
 
   async findReportById(id) {
-    return await Report.findById(id);
+    return await Report.findById(id)
+      .populate("reporterId", "name username")
+      .populate("reviewedBy", "name username")
+      .populate("assignedTo", "name username")
+      .populate("escalatedBy", "name username");
   }
 
   async findUserReport(reporterId, targetType, targetId) {
@@ -21,6 +25,15 @@ class ReportRepository {
     if (filters.reason) query.reason = filters.reason;
     if (filters.targetType) query.targetType = filters.targetType;
     if (filters.reporterId) query.reporterId = filters.reporterId;
+    if (filters.assignedTo) query.assignedTo = filters.assignedTo;
+    if (filters.priority) query.priority = filters.priority;
+    if (filters.escalated !== undefined) query.escalated = filters.escalated === "true";
+    if (filters.search) {
+      query.$or = [
+        { reason: { $regex: filters.search, $options: "i" } },
+        { description: { $regex: filters.search, $options: "i" } },
+      ];
+    }
     if (filters.dateFrom || filters.dateTo) {
       query.createdAt = {};
       if (filters.dateFrom) query.createdAt.$gte = new Date(filters.dateFrom);
@@ -30,6 +43,7 @@ class ReportRepository {
     const reports = await Report.find(query)
       .populate("reporterId", "name username")
       .populate("reviewedBy", "name username")
+      .populate("assignedTo", "name username")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -56,22 +70,44 @@ class ReportRepository {
     return await Report.findByIdAndUpdate(reportId, updates, { new: true });
   }
 
+  async assignReport(reportId, moderatorId) {
+    return await Report.findByIdAndUpdate(
+      reportId,
+      { assignedTo: moderatorId, assignedAt: new Date() },
+      { new: true }
+    );
+  }
+
+  async bulkUpdateReports(reportIds, updates) {
+    return await Report.updateMany(
+      { _id: { $in: reportIds } },
+      { $set: updates }
+    );
+  }
+
   async getReportAnalytics() {
     const [
       totalReports,
       pendingReports,
+      underReviewReports,
       resolvedReports,
       rejectedReports,
+      highPriorityReports,
+      escalatedReports,
       mostReportedPolls,
       mostReportedUsers,
       mostReportedComments,
       reportsByReason,
       reportsByDate,
+      avgResolutionTime,
     ] = await Promise.all([
       Report.countDocuments(),
       Report.countDocuments({ status: "pending" }),
+      Report.countDocuments({ status: "under_review" }),
       Report.countDocuments({ status: "resolved" }),
       Report.countDocuments({ status: "rejected" }),
+      Report.countDocuments({ priority: "high" }),
+      Report.countDocuments({ escalated: true }),
       Report.aggregate([
         { $match: { targetType: "poll" } },
         { $group: { _id: "$targetId", count: { $sum: 1 } } },
@@ -108,18 +144,37 @@ class ReportRepository {
         { $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 } },
         { $limit: 30 },
       ]),
+      Report.aggregate([
+        { $match: { status: "resolved", resolvedAt: { $ne: null } } },
+        {
+          $group: {
+            _id: null,
+            avgTime: {
+              $avg: {
+                $subtract: ["$resolvedAt", "$createdAt"],
+              },
+            },
+          },
+        },
+      ]),
     ]);
+
+    const avgTime = avgResolutionTime?.[0]?.avgTime || 0;
 
     return {
       totalReports,
       pendingReports,
+      underReviewReports,
       resolvedReports,
       rejectedReports,
+      highPriorityReports,
+      escalatedReports,
       mostReportedPolls,
       mostReportedUsers,
       mostReportedComments,
       reportsByReason,
       reportsByDate,
+      avgResolutionTime: avgTime > 0 ? Math.round(avgTime / (1000 * 60 * 60)) : 0,
     };
   }
 }

@@ -46,12 +46,52 @@ const reportSchema = new Schema(
       default: "pending",
       index: true,
     },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high", "critical"],
+      default: "medium",
+      index: true,
+    },
+    severity: {
+      type: String,
+      enum: ["minor", "moderate", "major", "severe"],
+      default: "moderate",
+      index: true,
+    },
+    assignedTo: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+      index: true,
+    },
+    assignedAt: {
+      type: Date,
+      default: null,
+    },
+    escalated: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    escalatedAt: {
+      type: Date,
+      default: null,
+    },
+    escalatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
     reviewedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
       default: null,
     },
     reviewedAt: {
+      type: Date,
+      default: null,
+    },
+    resolvedAt: {
       type: Date,
       default: null,
     },
@@ -85,6 +125,8 @@ const reportSchema = new Schema(
 
 reportSchema.index({ targetType: 1, targetId: 1 });
 reportSchema.index({ status: 1, createdAt: -1 });
+reportSchema.index({ priority: 1, status: 1 });
+reportSchema.index({ assignedTo: 1, status: 1 });
 reportSchema.index(
   { reporterId: 1, targetType: 1, targetId: 1 },
   { unique: true }
