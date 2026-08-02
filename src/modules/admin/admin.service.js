@@ -266,7 +266,7 @@ class AdminService {
     if (!report) throw new ApiError(404, "Report not found");
 
     const updated = await adminRepository.updateReportStatus(id, {
-      status: "reviewed",
+      status: "under_review",
       adminNotes,
       reviewedBy: adminId,
     });
@@ -279,7 +279,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report reviewed successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report reviewed successfully"
+    );
   }
 
   async resolveReport(adminId, id, adminNotes) {
@@ -300,7 +304,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report resolved successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report resolved successfully"
+    );
   }
 
   async rejectReport(adminId, id, adminNotes) {
@@ -308,7 +316,7 @@ class AdminService {
     if (!report) throw new ApiError(404, "Report not found");
 
     const updated = await adminRepository.updateReportStatus(id, {
-      status: "dismissed",
+      status: "rejected",
       adminNotes,
       reviewedBy: adminId,
     });
@@ -321,7 +329,84 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report rejected successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report rejected successfully"
+    );
+  }
+
+  async assignReport(adminId, id, moderatorId) {
+    const report = await adminRepository.getReportById(id);
+    if (!report) throw new ApiError(404, "Report not found");
+
+    const updated = await adminRepository.assignReport(id, moderatorId);
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "assign_report",
+      targetType: "report",
+      targetId: id,
+      details: { assignedTo: moderatorId },
+    });
+
+    return Response.success(
+      200,
+      { report: updated },
+      "Report assigned successfully"
+    );
+  }
+
+  async escalateReport(adminId, id) {
+    const report = await adminRepository.getReportById(id);
+    if (!report) throw new ApiError(404, "Report not found");
+
+    const updated = await adminRepository.updateReportStatus(id, {
+      escalated: true,
+      escalatedAt: new Date(),
+      priority: "critical",
+    });
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "escalate_report",
+      targetType: "report",
+      targetId: id,
+      details: { reason: report.reason, targetType: report.targetType },
+    });
+
+    return Response.success(
+      200,
+      { report: updated },
+      "Report escalated successfully"
+    );
+  }
+
+  async bulkUpdateReports(adminId, reportIds, updates) {
+    const result = await adminRepository.bulkUpdateReports(reportIds, updates);
+
+    await adminRepository.createAuditLog({
+      adminId,
+      action: "bulk_update_reports",
+      targetType: "report",
+      targetId: reportIds[0],
+      details: { count: reportIds.length, updates },
+    });
+
+    return Response.success(
+      200,
+      { modifiedCount: result.modifiedCount },
+      "Reports updated successfully"
+    );
+  }
+
+  async getModerationStats() {
+    const stats = await adminRepository.getModerationStats();
+    return Response.success(
+      200,
+      stats,
+      "Moderation stats fetched successfully"
+    );
   }
 
   async getNotifications(filters = {}, page = 1, limit = 20) {

@@ -13,6 +13,9 @@ import {
   resolveReportValidation,
   rejectReportValidation,
   reportAnalyticsValidation,
+  assignReportValidation,
+  bulkUpdateReportsValidation,
+  escalateReportValidation,
 } from "./report.validation.js";
 
 const router = Router();
@@ -54,6 +57,15 @@ router.get(
 );
 
 router.get(
+  "/moderation-stats",
+  authenticate,
+  authorize("admin", "super_admin"),
+  reportLimiter,
+  validate(reportAnalyticsValidation),
+  ReportController.getModerationStats
+);
+
+router.get(
   "/:reportId",
   authenticate,
   validate(getReportByIdValidation),
@@ -88,6 +100,33 @@ router.patch(
   toLowerCaseEnum,
   validate(rejectReportValidation),
   ReportController.rejectReport
+);
+
+router.patch(
+  "/:reportId/assign",
+  authenticate,
+  authorize("admin", "super_admin"),
+  reportLimiter,
+  validate(assignReportValidation),
+  ReportController.assignReport
+);
+
+router.patch(
+  "/:reportId/escalate",
+  authenticate,
+  authorize("admin", "super_admin"),
+  reportLimiter,
+  validate(escalateReportValidation),
+  ReportController.escalateReport
+);
+
+router.patch(
+  "/bulk",
+  authenticate,
+  authorize("admin", "super_admin"),
+  reportLimiter,
+  validate(bulkUpdateReportsValidation),
+  ReportController.bulkUpdateReports
 );
 
 export default router;

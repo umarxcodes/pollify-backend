@@ -72,4 +72,35 @@ export const rejectReportValidation = z.object({
   }),
 });
 
+export const assignReportValidation = z.object({
+  params: z.object({
+    reportId: z.string().min(1, "Report ID is required"),
+  }),
+  body: z.object({
+    moderatorId: z.string().min(1, "Moderator ID is required"),
+  }),
+});
+
+export const bulkUpdateReportsValidation = z.object({
+  body: z.object({
+    reportIds: z
+      .array(z.string().min(1, "Report ID is required"))
+      .min(1, "At least one report ID is required"),
+    updates: z.object({
+      status: z
+        .enum(["pending", "under_review", "resolved", "rejected"])
+        .optional(),
+      priority: z.enum(["low", "medium", "high", "critical"]).optional(),
+      assignedTo: z.string().optional(),
+      adminNotes: z.string().max(500).optional(),
+    }),
+  }),
+});
+
+export const escalateReportValidation = z.object({
+  params: z.object({
+    reportId: z.string().min(1, "Report ID is required"),
+  }),
+});
+
 export const reportAnalyticsValidation = z.object({});

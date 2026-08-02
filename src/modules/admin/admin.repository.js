@@ -261,7 +261,8 @@ class AdminRepository {
 
     if (filters.status) query.status = filters.status;
     if (filters.targetType) query.targetType = filters.targetType;
-    if (filters.reason) query.reason = { $regex: filters.reason, $options: "i" };
+    if (filters.reason)
+      query.reason = { $regex: filters.reason, $options: "i" };
     if (filters.search) {
       query.$or = [
         { reason: { $regex: filters.search, $options: "i" } },
@@ -289,6 +290,90 @@ class AdminRepository {
 
   async updateReportStatus(id, updates) {
     return await Report.findByIdAndUpdate(id, updates, { new: true });
+  }
+
+  async assignReport(id, moderatorId) {
+    return await Report.findByIdAndUpdate(
+      id,
+      { assignedTo: moderatorId, assignedAt: new Date() },
+      { new: true }
+    );
+  }
+
+  async bulkUpdateReports(reportIds, updates) {
+    return await Report.updateMany(
+      { _id: { $in: reportIds } },
+      { $set: updates }
+    );
+  }
+
+  async getModerationStats() {
+    const [
+      totalReports,
+      pendingReports,
+      underReviewReports,
+      resolvedReports,
+      rejectedReports,
+      highPriorityReports,
+      escalatedReports,
+      reportsByReason,
+      reportsByDate,
+      recentActivity,
+    ] = await Promise.all([
+      Report.countDocuments(),
+      Report.countDocuments({ status: "pending" }),
+      Report.countDocuments({ status: "under_review" }),
+      Report.countDocuments({ status: "resolved" }),
+      Report.countDocuments({ status: "rejected" }),
+      Report.countDocuments({ priority: "high" }),
+      Report.countDocuments({ escalated: true }),
+      Report.aggregate([
+        { $group: { _id: "$reason", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]),
+      Report.aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+              day: { $dayOfMonth: "$createdAt" },
+            },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 } },
+        { $limit: 30 },
+      ]),
+      AuditLog.find({ targetType: "report" })
+        .populate("adminId", "name username")
+        .sort({ createdAt: -1 })
+        .limit(10)
+        .lean(),
+    ]);
+
+    return {
+      totalReports,
+      pendingReports,
+      underReviewReports,
+      resolvedReports,
+      rejectedReports,
+      highPriorityReports,
+      escalatedReports,
+      reportsByReason,
+      reportsByDate,
+      recentActivity: recentActivity.map((log) => ({
+        action: log.action
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase()),
+        type: log.action.includes("resolve")
+          ? "resolved"
+          : log.action.includes("reject")
+            ? "rejected"
+            : "reviewed",
+        timestamp: log.createdAt,
+      })),
+    };
   }
 
   // Notifications
