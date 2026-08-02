@@ -27,7 +27,8 @@ class ReportRepository {
     if (filters.reporterId) query.reporterId = filters.reporterId;
     if (filters.assignedTo) query.assignedTo = filters.assignedTo;
     if (filters.priority) query.priority = filters.priority;
-    if (filters.escalated !== undefined) query.escalated = filters.escalated === "true";
+    if (filters.escalated !== undefined)
+      query.escalated = filters.escalated === "true";
     if (filters.search) {
       query.$or = [
         { reason: { $regex: filters.search, $options: "i" } },
@@ -174,7 +175,8 @@ class ReportRepository {
       mostReportedComments,
       reportsByReason,
       reportsByDate,
-      avgResolutionTime: avgTime > 0 ? Math.round(avgTime / (1000 * 60 * 60)) : 0,
+      avgResolutionTime:
+        avgTime > 0 ? Math.round(avgTime / (1000 * 60 * 60)) : 0,
     };
   }
 }

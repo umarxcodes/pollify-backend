@@ -124,9 +124,13 @@ export const escalateReportValidation = z.object({
 
 export const bulkUpdateReportsValidation = z.object({
   body: z.object({
-    reportIds: z.array(z.string().min(1, "Report ID is required")).min(1, "At least one report ID is required"),
+    reportIds: z
+      .array(z.string().min(1, "Report ID is required"))
+      .min(1, "At least one report ID is required"),
     updates: z.object({
-      status: z.enum(["pending", "reviewed", "resolved", "dismissed"]).optional(),
+      status: z
+        .enum(["pending", "reviewed", "resolved", "dismissed"])
+        .optional(),
       priority: z.enum(["low", "medium", "high", "critical"]).optional(),
       assignedTo: z.string().optional(),
       adminNotes: z.string().max(500).optional(),

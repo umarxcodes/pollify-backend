@@ -279,7 +279,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report reviewed successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report reviewed successfully"
+    );
   }
 
   async resolveReport(adminId, id, adminNotes) {
@@ -300,7 +304,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report resolved successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report resolved successfully"
+    );
   }
 
   async rejectReport(adminId, id, adminNotes) {
@@ -321,7 +329,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report rejected successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report rejected successfully"
+    );
   }
 
   async assignReport(adminId, id, moderatorId) {
@@ -338,7 +350,11 @@ class AdminService {
       details: { assignedTo: moderatorId },
     });
 
-    return Response.success(200, { report: updated }, "Report assigned successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report assigned successfully"
+    );
   }
 
   async escalateReport(adminId, id) {
@@ -359,7 +375,11 @@ class AdminService {
       details: { reason: report.reason, targetType: report.targetType },
     });
 
-    return Response.success(200, { report: updated }, "Report escalated successfully");
+    return Response.success(
+      200,
+      { report: updated },
+      "Report escalated successfully"
+    );
   }
 
   async bulkUpdateReports(adminId, reportIds, updates) {
@@ -382,7 +402,11 @@ class AdminService {
 
   async getModerationStats() {
     const stats = await adminRepository.getModerationStats();
-    return Response.success(200, stats, "Moderation stats fetched successfully");
+    return Response.success(
+      200,
+      stats,
+      "Moderation stats fetched successfully"
+    );
   }
 
   async getNotifications(filters = {}, page = 1, limit = 20) {

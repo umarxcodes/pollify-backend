@@ -261,7 +261,8 @@ class AdminRepository {
 
     if (filters.status) query.status = filters.status;
     if (filters.targetType) query.targetType = filters.targetType;
-    if (filters.reason) query.reason = { $regex: filters.reason, $options: "i" };
+    if (filters.reason)
+      query.reason = { $regex: filters.reason, $options: "i" };
     if (filters.search) {
       query.$or = [
         { reason: { $regex: filters.search, $options: "i" } },
@@ -362,8 +363,14 @@ class AdminRepository {
       reportsByReason,
       reportsByDate,
       recentActivity: recentActivity.map((log) => ({
-        action: log.action.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-        type: log.action.includes("resolve") ? "resolved" : log.action.includes("reject") ? "rejected" : "reviewed",
+        action: log.action
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase()),
+        type: log.action.includes("resolve")
+          ? "resolved"
+          : log.action.includes("reject")
+            ? "rejected"
+            : "reviewed",
         timestamp: log.createdAt,
       })),
     };

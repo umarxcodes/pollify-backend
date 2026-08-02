@@ -182,7 +182,10 @@ class ReportService {
   }
 
   async bulkUpdateReports(adminId, reportIds, updates) {
-    const reports = await reportRepository.bulkUpdateReports(reportIds, updates);
+    const reports = await reportRepository.bulkUpdateReports(
+      reportIds,
+      updates
+    );
 
     await adminRepository.createAuditLog({
       adminId,

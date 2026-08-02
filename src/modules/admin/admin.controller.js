@@ -252,7 +252,10 @@ class AdminController {
 
   static async escalateReport(req, res, next) {
     try {
-      const result = await adminService.escalateReport(req.user.id, req.params.id);
+      const result = await adminService.escalateReport(
+        req.user.id,
+        req.params.id
+      );
       res.status(200).json(result);
     } catch (error) {
       next(error);
