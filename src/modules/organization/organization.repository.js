@@ -1,7 +1,6 @@
 import Organization from "../../models/Organization.js";
 import OrganizationMember from "../../models/OrganizationMember.js";
 
-
 class OrganizationRepository {
   async create(data) {
     return await Organization.create(data);

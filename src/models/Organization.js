@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-
 const organizationSchema = new Schema(
   {
     name: {
