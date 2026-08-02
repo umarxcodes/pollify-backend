@@ -176,6 +176,80 @@ class AdminController {
     }
   }
 
+  static async getReports(req, res, next) {
+    try {
+      const result = await adminService.getReports(
+        req.query,
+        parseInt(req.query.page) || 1,
+        parseInt(req.query.limit) || 20
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getReport(req, res, next) {
+    try {
+      const result = await adminService.getReport(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async reviewReport(req, res, next) {
+    try {
+      const result = await adminService.reviewReport(
+        req.user.id,
+        req.params.id,
+        req.body.adminNotes || ""
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async resolveReport(req, res, next) {
+    try {
+      const result = await adminService.resolveReport(
+        req.user.id,
+        req.params.id,
+        req.body.adminNotes || ""
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async rejectReport(req, res, next) {
+    try {
+      const result = await adminService.rejectReport(
+        req.user.id,
+        req.params.id,
+        req.body.adminNotes || ""
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getNotifications(req, res, next) {
+    try {
+      const result = await adminService.getNotifications(
+        req.query,
+        parseInt(req.query.page) || 1,
+        parseInt(req.query.limit) || 20
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getCategories(req, res, next) {
     try {
       const result = await adminService.getCategories(

@@ -30,7 +30,13 @@ class BookmarkRepository {
     return await Bookmark.deleteMany({ pollId });
   }
 
-  async getUserBookmarks(userId, page = 1, limit = 20, sort = "newest") {
+  async getUserBookmarks(
+    userId,
+    page = 1,
+    limit = 20,
+    sort = "newest",
+    search = ""
+  ) {
     const skip = (page - 1) * limit;
     let sortOption = { createdAt: -1 };
 
@@ -42,7 +48,19 @@ class BookmarkRepository {
       sortOption = { createdAt: -1 };
     }
 
-    return await Bookmark.find({ userId })
+    let query = { userId };
+
+    if (search && search.trim()) {
+      const matchingPollIds = await Poll.find({
+        title: { $regex: search.trim(), $options: "i" },
+      })
+        .limit(500)
+        .select("_id");
+      const pollIds = matchingPollIds.map((p) => p._id);
+      query.pollId = { $in: pollIds };
+    }
+
+    return await Bookmark.find(query)
       .populate({
         path: "pollId",
         populate: {

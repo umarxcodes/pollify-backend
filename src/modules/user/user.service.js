@@ -1,6 +1,11 @@
 import { ApiError } from "../../utils/apiError.js";
 import { Response } from "../../utils/response.js";
 import User from "../../models/User.js";
+import Poll from "../../models/Poll.js";
+import Vote from "../../models/Vote.js";
+import Comment from "../../models/Comment.js";
+import Bookmark from "../../models/Bookmark.js";
+import Follow from "../../models/Follow.js";
 import { userRepository } from "./user.repository.js";
 import { CloudinaryService } from "../../services/cloudinary.service.js";
 
@@ -125,18 +130,37 @@ class UserService {
     const stats = await userRepository.getUserStats(userId);
     const profileCompletion = stats[0]?.profileCompletion || 0;
 
+    const [
+      totalPollsCreated,
+      totalVotesCast,
+      totalComments,
+      totalSavedPolls,
+      totalLikesReceived,
+      followersCount,
+      followingCount,
+    ] = await Promise.all([
+      Poll.countDocuments({ createdBy: userId }),
+      Vote.countDocuments({ userId }),
+      Comment.countDocuments({ userId, isDeleted: false }),
+      Bookmark.countDocuments({ userId }),
+      Comment.countDocuments({ userId: userId, isDeleted: false }),
+      Follow.countDocuments({ followingId: userId }),
+      Follow.countDocuments({ followerId: userId }),
+    ]);
+
     return Response.success(
       200,
       {
         stats: {
           profileCompletionPercentage: profileCompletion,
           accountCreatedAt: user.createdAt,
-          // Placeholder stats for future poll/vote/comment modules
-          totalPollsCreated: 0,
-          totalVotesCast: 0,
-          totalComments: 0,
-          totalSavedPolls: 0,
-          totalLikesReceived: 0,
+          totalPollsCreated,
+          totalVotesCast,
+          totalComments,
+          totalSavedPolls,
+          totalLikesReceived,
+          followersCount,
+          followingCount,
         },
       },
       "Account statistics fetched successfully"

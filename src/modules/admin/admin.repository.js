@@ -254,6 +254,68 @@ class AdminRepository {
     );
   }
 
+  // Reports
+  async getReports(filters = {}, page = 1, limit = 20) {
+    const skip = (page - 1) * limit;
+    let query = {};
+
+    if (filters.status) query.status = filters.status;
+    if (filters.targetType) query.targetType = filters.targetType;
+    if (filters.reason) query.reason = { $regex: filters.reason, $options: "i" };
+    if (filters.search) {
+      query.$or = [
+        { reason: { $regex: filters.search, $options: "i" } },
+        { description: { $regex: filters.search, $options: "i" } },
+      ];
+    }
+
+    const reports = await Report.find(query)
+      .populate("reporterId", "name username")
+      .populate("reviewedBy", "name username")
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const total = await Report.countDocuments(query);
+
+    return { reports, total };
+  }
+
+  async getReportById(id) {
+    return await Report.findById(id)
+      .populate("reporterId", "name username")
+      .populate("reviewedBy", "name username");
+  }
+
+  async updateReportStatus(id, updates) {
+    return await Report.findByIdAndUpdate(id, updates, { new: true });
+  }
+
+  // Notifications
+  async getNotifications(filters = {}, page = 1, limit = 20) {
+    const skip = (page - 1) * limit;
+    let query = {};
+
+    if (filters.type) query.type = filters.type;
+    if (filters.read !== undefined) query.read = filters.read === "true";
+    if (filters.search) {
+      query.$or = [
+        { title: { $regex: filters.search, $options: "i" } },
+        { message: { $regex: filters.search, $options: "i" } },
+      ];
+    }
+
+    const notifications = await Notification.find(query)
+      .populate("senderId", "name username")
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const total = await Notification.countDocuments(query);
+
+    return { notifications, total };
+  }
+
   // Categories
   async getCategories(filters = {}, page = 1, limit = 20) {
     const skip = (page - 1) * limit;
