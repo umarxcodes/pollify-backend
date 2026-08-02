@@ -42,40 +42,57 @@ class BookmarkService {
     return Response.success(200, { saved: exists }, "Bookmark status fetched");
   }
 
-  async getMyBookmarks(userId, page = 1, limit = 20, sort = "newest") {
+  async getMyBookmarks(
+    userId,
+    page = 1,
+    limit = 20,
+    sort = "newest",
+    search = ""
+  ) {
     const bookmarks = await bookmarkRepository.getUserBookmarks(
       userId,
       page,
       limit,
-      sort
+      sort,
+      search
     );
     const total = await bookmarkRepository.countUserBookmarks(userId);
 
-    const enriched = bookmarks
-      .map((b) => {
+    const enriched = await Promise.all(
+      bookmarks.map(async (b) => {
         const poll = b.pollId;
         if (!poll) return null;
 
-        const enrichedPoll = {
-          ...poll.toObject(),
-          creator: poll.createdBy,
-          commentCount: 0,
-          voteCount: poll.totalVotes || 0,
-        };
+        const commentCount = await bookmarkRepository.getPollCommentCount(
+          poll._id
+        );
 
         return {
           id: b._id,
-          poll: enrichedPoll,
+          poll: {
+            ...poll.toObject(),
+            creator: poll.createdBy,
+            commentCount,
+            voteCount: poll.totalVotes || 0,
+          },
           savedAt: b.createdAt,
         };
       })
-      .filter(Boolean);
+    );
+
+    const filtered = enriched.filter(Boolean);
 
     return Response.success(
       200,
       {
-        bookmarks: enriched,
-        pagination: { page, limit, total },
+        bookmarks: filtered,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+          hasNext: page * limit < total,
+        },
       },
       "Bookmarks fetched successfully"
     );
