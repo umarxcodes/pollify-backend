@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { env } from "../config/env.js";
 
 const organizationSchema = new Schema(
   {
