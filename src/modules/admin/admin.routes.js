@@ -19,6 +19,9 @@ import {
   createNotificationValidation,
   getAuditLogsValidation,
   updateSettingsValidation,
+  getReportsValidation,
+  reportActionValidation,
+  getNotificationsValidation,
 } from "./admin.validation.js";
 
 const router = Router();
@@ -159,6 +162,58 @@ router.patch(
   adminLimiter,
   validate(commentActionValidation),
   AdminController.restoreComment
+);
+
+// Reports
+router.get(
+  "/reports",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(getReportsValidation),
+  AdminController.getReports
+);
+router.get(
+  "/reports/:id",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(reportActionValidation),
+  AdminController.getReport
+);
+router.patch(
+  "/reports/:id/review",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(reportActionValidation),
+  AdminController.reviewReport
+);
+router.patch(
+  "/reports/:id/resolve",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(reportActionValidation),
+  AdminController.resolveReport
+);
+router.patch(
+  "/reports/:id/reject",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(reportActionValidation),
+  AdminController.rejectReport
+);
+
+// Notifications
+router.get(
+  "/notifications",
+  authenticate,
+  authorize("admin", "super_admin"),
+  adminLimiter,
+  validate(getNotificationsValidation),
+  AdminController.getNotifications
 );
 
 // Categories

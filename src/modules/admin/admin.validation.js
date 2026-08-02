@@ -175,3 +175,13 @@ export const updateSettingsValidation = z.object({
     notificationEnabled: z.boolean().optional(),
   }),
 });
+
+export const getNotificationsValidation = z.object({
+  query: z.object({
+    page: z.string().optional(),
+    limit: z.string().optional(),
+    type: z.string().optional(),
+    read: z.enum(["true", "false"]).optional(),
+    search: z.string().optional(),
+  }),
+});
