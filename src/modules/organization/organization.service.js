@@ -1,7 +1,7 @@
 import { ApiError } from "../../utils/apiError.js";
 import { Response } from "../../utils/response.js";
 import { organizationRepository } from "./organization.repository.js";
-import OrganizationMember from "../../models/OrganizationMember.js";
+
 import User from "../../models/User.js";
 
 class OrganizationService {
