@@ -10,11 +10,11 @@ export const generateCsrfToken = () => {
 };
 
 export const setCsrfCookie = (res, token) => {
+  const isProduction = env.nodeEnv === "production";
   res.cookie(CSRF_COOKIE_NAME, token, {
-    // Double-submit CSRF requires browser JavaScript to read this non-secret token.
     httpOnly: false,
     secure: env.cookieSecure,
-    sameSite: "lax",
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
     maxAge: 24 * 60 * 60 * 1000,
   });
