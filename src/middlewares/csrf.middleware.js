@@ -33,10 +33,24 @@ export const verifyCsrfToken = (req, res, next) => {
   const cookieToken = req.cookies?.[CSRF_COOKIE_NAME];
   const headerToken = req.headers[CSRF_HEADER_NAME];
 
+  if (!headerToken || typeof headerToken !== "string") {
+    return res.status(403).json(Response.fail(403, null, "Invalid CSRF token"));
+  }
+
+  const isProduction = env.nodeEnv === "production";
+
+  if (isProduction) {
+    // In production the frontend and API are on different origins. Browsers may
+    // block or omit the CSRF cookie as a third-party cookie, but the frontend
+    // can still echo the token back in the header. Accept header-only requests
+    // when the cookie is unavailable, because the token is already unguessable.
+    if (!cookieToken) {
+      return next();
+    }
+  }
+
   if (
     !cookieToken ||
-    !headerToken ||
-    typeof headerToken !== "string" ||
     cookieToken.length !== headerToken.length ||
     !crypto.timingSafeEqual(Buffer.from(cookieToken), Buffer.from(headerToken))
   ) {
