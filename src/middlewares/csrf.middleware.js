@@ -11,6 +11,10 @@ export const generateCsrfToken = () => {
 
 export const setCsrfCookie = (res, token) => {
   const isProduction = env.nodeEnv === "production";
+  // The frontend and API are deployed on different Vercel domains. Browsers
+  // cannot expose an API-domain cookie through frontend `document.cookie`, so
+  // also return the double-submit value in the CORS-exposed response header.
+  res.set(CSRF_HEADER_NAME, token);
   res.cookie(CSRF_COOKIE_NAME, token, {
     httpOnly: false,
     secure: env.cookieSecure,
