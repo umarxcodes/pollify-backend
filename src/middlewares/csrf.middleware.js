@@ -49,7 +49,11 @@ export const verifyCsrfToken = (req, res, next) => {
     }
   }
 
-  if (!cookieToken || cookieToken.length !== headerToken.length || !crypto.timingSafeEqual(Buffer.from(cookieToken), Buffer.from(headerToken))) {
+  if (
+    !cookieToken ||
+    cookieToken.length !== headerToken.length ||
+    !crypto.timingSafeEqual(Buffer.from(cookieToken), Buffer.from(headerToken))
+  ) {
     return res.status(403).json(Response.fail(403, null, "Invalid CSRF token"));
   }
 
